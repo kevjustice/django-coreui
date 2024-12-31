@@ -1,0 +1,31 @@
+{% extends "layouts/base-min.html" %}
+
+{% block title %} Page 403 {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+
+    <div class="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-md-6">
+              <div class="clearfix">
+                <h1 class="float-start display-3 me-4">403</h1>
+                <h4 class="pt-3">ACCESS DENIED!</h4>
+                <p class="text-body-secondary">The page you are looking for requires authentication. Please login.</p>
+              </div>
+              <div class="input-group"><span class="input-group-text">
+                  <a href="{% url 'login' %}" class="btn btn-primary btn-round">LOGIN</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

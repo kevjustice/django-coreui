@@ -1,0 +1,103 @@
+https://github.com/coreui/coreui-pro?tab=readme-ov-file
+
+Several quick start options are available:
+
+    Download the latest release
+    Clone the repo: git clone https://github.com/coreui/coreui-pro.git
+    Install with npm: npm install @coreui/coreui-pro
+    Install with yarn: yarn add @coreui/coreui-pro
+    Install with Composer: composer require coreui/coreui-pro:5.8.0
+
+Read the Getting started page for information on the framework contents, templates and examples, and more.
+
+
+
+coreui-free-bootstrap-admin-template
+
+https://github.com/coreui/coreui-free-bootstrap-admin-template
+
+CoreUI Bootstrap Admin Panel Template is not another blend of 3rd parties free components and libraries. It's the only Open Source Bootstrap Admin Dashboard Template built on the enterprise-grade hand-crafted UI Components Library created and backed by professionals. CoreUI Admin Template helps you build reliable web apps faster than before. CoreUI offers 4 versions: Angular, Bootstrap, React.js, and Vue.js.
+
+Curious why I decided to create CoreUI? Please read this article: Jack of all trades, master of none. Why Bootstrap Admin Templates suck.
+Table of Contents
+
+    Frameworks
+    CoreUI PRO
+    CoreUI PRO Bootstrap Admin Templates
+    Installation
+    Usage
+    What's included
+    Documentation
+    Components
+    Contributing
+    Versioning
+    Creators
+    Community
+    Support CoreUI Development
+    Copyright and license
+
+Frameworks
+
+CoreUI is built on top of Bootstrap 5 and supports popular frameworks.
+
+    CoreUI Free Angular Admin Template
+    CoreUI Free Bootstrap Admin Template
+    CoreUI Free React.js Admin Template
+    CoreUI Free Vue.js Admin Template
+Installation
+Clone repo
+
+# clone the repo
+$ git clone https://github.com/coreui/coreui-free-bootstrap-admin-template.git my-project
+
+# go into app's directory
+$ cd my-project
+
+# install app's dependencies
+$ npm install
+
+Usage
+
+# serve with hot reload at localhost:3000.
+$ npm start
+
+# build for production with minification
+$ npm run build
+
+What's included
+
+Within the download you'll find the following directories and files, logically grouping common assets and providing both compiled and minified variations. You'll see something like this:
+
+free-bootstrap-admin-template/
+├── build/
+├── src/
+│   ├── assets/
+│   │   ├── brand/
+│   │   ├── favicon/
+│   │   ├── icons/
+│   │   ├── img/
+│   ├── js/
+│   ├── pug/
+│   │   ├── _layout/
+│   │   ├── _partial/
+│   │   ├── base/
+│   │   ├── buttons/
+│   │   ├── icons/
+│   │   ├── notifications/
+│   │   ├── ...
+│   │   ├── index.pug
+│   │   └── ...
+│   ├── scss/
+│   ├── vendors/
+│   └── views/
+│       ├── base/
+│       ├── buttons/
+│       ├── css/
+│       ├── icons/
+│       ├── notifications/
+│       ├── ...
+│       ├── index.html
+│       └── ...
+└── package.json
+
+Documentation

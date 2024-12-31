@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" data-coreui-theme="dark">
+{% block head %}{% include './includes/head.html' %}{% endblock head %}
+
+<body class="">
+  {% block sidebar %}{% include './includes/sidebar.html' %}{% endblock sidebar %}
+  <div class="wrapper d-flex flex-column min-vh-100">
+    {% block header %}{% include './includes/header.html' %}{% endblock header %}
+    <div class="body flex-grow-1">
+      {% block content %}
+      <div class="container-lg px-4">
+        Hmmmm...  No content got passed?
+      </div>
+      {% endblock content %}
+    </div>
+    {% block footer %}{% include './includes/footer.html' %}{% endblock footer %}
+  </div>
+  {% block corescripts %}
+  <!-- CoreUI and necessary plugins-->
+  <script src="/static/modules/@coreui/coreui/dist/js/coreui.bundle.min.js"></script>
+  <script src="/static/modules/simplebar/dist/simplebar.min.js"></script>
+  <script>
+    const header = document.querySelector('header.header');
+    
+    document.addEventListener('scroll', () => {
+      if (header) {
+        header.classList.toggle('shadow-sm', document.documentElement.scrollTop > 0);
+      }
+    });
+    
+  </script>
+  {% endblock corescripts %}
+  {% block site_javascripts %}{% endblock site_javascripts %} 
+  {% block page_javascripts %}{% endblock page_javascripts %}    
+</body>
+</html>

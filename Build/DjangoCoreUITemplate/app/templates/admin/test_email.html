@@ -1,0 +1,34 @@
+<!-- templates/admin/test_email.html -->
+{% extends "../base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Email Test</h3>
+    </div>
+    <div class="card-body">
+        <form method="post" class="form">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Send Test Email</button>
+        </form>
+
+        {% if test_results %}
+        <div class="mt-4">
+            <h4>Test Results</h4>
+            <div class="alert {% if test_results.success %}alert-success{% else %}alert-danger{% endif %}">
+                <p><strong>Status:</strong> {{ test_results.message }}</p>
+                <p><strong>Time:</strong> {{ test_results.timestamp }}</p>
+                {% if test_results.error_details %}
+                <p><strong>Error Details:</strong> {{ test_results.error_details }}</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

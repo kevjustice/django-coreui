@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+{% include '../includes/head.html' %}
+<body class="">
+
+  {% block content %}{% endblock content %}
+  <!-- CoreUI and necessary plugins-->
+  <script src="/static/modules/@coreui/coreui/dist/js/coreui.bundle.min.js"></script>
+  <script src="/static/modules/simplebar/dist/simplebar.min.js"></script>
+  <script>
+    const header = document.querySelector('header.header');
+    
+    document.addEventListener('scroll', () => {
+      if (header) {
+        header.classList.toggle('shadow-sm', document.documentElement.scrollTop > 0);
+      }
+    });
+    
+  </script>
+  
+  <!-- Specific Page JS goes HERE  -->
+   
+  {% block javascripts %}{% endblock javascripts %}
+  
+</body>
+</html>
