@@ -2,13 +2,14 @@
 URL Configuration for the application
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.models import User
 from django.core.management import call_command
 from app import views
+from .views import ExampleTemplateView
 
 # Run initial setup check
 #try:
@@ -24,6 +25,12 @@ urlpatterns = [
     # Example URLS
     path('dashboard/', views.DashboardView.as_view(), name='dashboard'),
     path('icons/', views.IconsView.as_view(), name='icons'),
+    path('examples/', 
+         ExampleTemplateView.as_view(template_name='examples/index.html'), 
+         name='example_index'),
+    re_path(r'^examples/(?P<template_path>[\w/-]+)/$', 
+            ExampleTemplateView.as_view(), 
+            name='example_template'),
     
     # Django Admin
     path('admin/', admin.site.urls),

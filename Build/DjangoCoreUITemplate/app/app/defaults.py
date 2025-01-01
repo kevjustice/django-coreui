@@ -24,6 +24,15 @@ DEFAULT_MENUS = {
                 'auth_requirement': 'auth_only',
                 'order': 10
             },
+        {
+                'id': 'examples',
+                'item_type': 'link',
+                'menu_text': 'Example Components',
+                'url': '/examples',
+                'icon': '/static/modules/@coreui/icons/sprites/free.svg#cil-applications',
+                'auth_requirement': 'all',
+                'order': 11
+            },    
             {
                 'id': 'sidebar_iconref',
                 'item_type': 'link',
@@ -31,7 +40,7 @@ DEFAULT_MENUS = {
                 'url': '/icons',
                 'icon': '/static/modules/@coreui/icons/sprites/free.svg#cil-3d',
                 'auth_requirement': 'all',
-                'order': 10
+                'order': 12
             },            
             
             {

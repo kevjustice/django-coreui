@@ -1,25 +1,52 @@
 {% extends "../base.html" %}
 
-{% block title %} Dashboard {% endblock %} 
+{% block title %} Examples {% endblock %} 
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
 
-   
-
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <!-- Sidebar with example list -->
+            <div class="list-group">
+                {% for template in example_templates %}
+                    <a href="{{ template.url }}" 
+                       class="list-group-item list-group-item-action {% if template.path == template_path %}active{% endif %}">
+                        {{ template.name }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-9">
+            <!-- Content area -->
+            {% if template_path %}
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">{{ template_path|title }}</h5>
+                        <small class="text-muted">Template: {{ current_template }}</small>
+                    </div>
+                    <div class="card-body">
+                        {% block example_content %}{% endblock %}
+                    </div>
+                </div>
+            {% else %}
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Example Templates</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Select an example from the left sidebar to view it.</p>
+                        <p>Available examples: {{ example_templates|length }}</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
-{% block javascripts %}
-
-  <script>
-    $(document).ready(function() {
-      // Javascript method's body can be found in assets/js/demos.js
-      md.initDashboardPageCharts();
-
-    });
-  </script>
-
-{% endblock javascripts %}
+{% block javascripts %}{% endblock javascripts %}

@@ -4,7 +4,7 @@ Django views for the application
 from functools import wraps
 from django.http import HttpResponse, Http404, JsonResponse
 from django.contrib.auth import logout, update_session_auth_hash, get_user_model
-from django.shortcuts import render, redirect, get_object_or_404
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
@@ -12,11 +12,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
 from django.contrib.auth.views import LoginView
-from django.utils.decorators import method_decorator
-from django.views.decorators.http import require_http_methods
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError, PermissionDenied
+from django.shortcuts import render, redirect, get_object_or_404
+from django.template import TemplateDoesNotExist
+from django.template.loader import get_template
+from django.utils.decorators import method_decorator
 from django.urls import reverse, reverse_lazy
+from django.views.decorators.http import require_http_methods
 from django.views.generic import (
     TemplateView, 
     ListView, 
@@ -25,7 +28,7 @@ from django.views.generic import (
     DeleteView,
     FormView
 )
-from django.conf import settings
+
 
 from .forms import (
     CustomUserCreationForm,
@@ -34,6 +37,7 @@ from .forms import (
     InitialSetupForm,
     CustomLoginForm,
 )
+from pathlib import Path
 from .utilities.session_manager import UserSessionManager
 from .utilities.menu_manager import MenuManager
 from .utilities.email_tests import send_test_email, run_comprehensive_email_test
@@ -107,7 +111,61 @@ class DashboardView(LoginRequiredMixin, BaseContextMixin, TemplateView):
         base_context['title'] = f"{base_context['title']}Dashboard"
         context.update(base_context)
         return context
-    
+
+class ExampleTemplateView(BaseContextMixin, TemplateView):
+    template_name = 'examples/index.html'  # Default template for index
+
+    def get_template_names(self):
+        template_path = self.kwargs.get('template_path', '')
+        
+        # If no template_path (we're at /examples/), use the index template
+        if not template_path:
+            return [self.template_name]
+            
+        # Otherwise, try to find the specific example template
+        example_template = f"examples/{template_path}.html"
+        try:
+            get_template(example_template)
+            return [example_template]
+        except TemplateDoesNotExist:
+            raise Http404(f"Example template '{template_path}' does not exist")
+
+    def get_example_templates(self):
+        """Get list of all example templates"""
+        templates = []
+        example_dir = Path(settings.BASE_DIR) / 'templates' / 'examples'
+        
+        for root, dirs, files in os.walk(example_dir):
+            for file in files:
+                if file.endswith('.html') and file != 'index.html':  # Skip index.html
+                    rel_path = os.path.relpath(
+                        os.path.join(root, file), 
+                        example_dir
+                    )
+                    template_path = os.path.splitext(rel_path)[0]
+                    templates.append({
+                        'path': template_path,
+                        'name': template_path.replace('/', ' > ').title(),
+                        'url': f"/examples/{template_path}/"
+                    })
+        
+        return sorted(templates, key=lambda x: x['path'])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        base_context = self.get_base_context(self.request)
+        base_context['title'] = f"{base_context['title']}Dashboard"
+        context.update(base_context)
+        context.update({
+            'template_path': self.kwargs.get('template_path', ''),
+            'example_templates': self.get_example_templates(),
+            'current_template': (f"examples/{self.kwargs.get('template_path')}.html" 
+                               if self.kwargs.get('template_path') 
+                               else None)
+        })
+        return context
+
+
 class CustomLoginView(LoginView):
     form_class = CustomLoginForm
     template_name = 'accounts/login.html'
