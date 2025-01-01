@@ -112,7 +112,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'app.utilities.context_processors.settings_context',
+                'app.middleware.context_processors.settings_context',
             ],                
             'libraries':{
                 'menu_tags': 'app.templatetags.menu_tags',
