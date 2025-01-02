@@ -1,11 +1,18 @@
-{% extends "../../base.html" %}
+<!-- For the next extends, you'll want to use base.html instead! -->
+{% extends "examples/index.html" %}
+
+<!-- This block won't be here in your code - it's how we load in the example conent to the viewer.-->
+{% block example_content %}
 
 {% block title %} Dashboard {% endblock %} 
 
 <!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block page_stylesheets %}{% endblock page_stylesheets %}
 
-{% block content %}        <div class="container-lg px-4">
+
+<!-- You need another block here - just remember to remove the underscores!
+{_% block content %_} 
+-->        <div class="container-lg px-4">
           <div class="bg-primary bg-opacity-10 border border-2 border-primary rounded mb-4">
             <div class="row d-flex align-items-center p-3 px-xl-4 flex-xl-nowrap">
               <div class="col-xl-auto col-12 d-none d-xl-block p-0"><img class="img-fluid" src="/static/assets/img/components.webp" width="160px" height="160px" alt="CoreUI PRO hexagon"></div>
@@ -161,17 +168,12 @@
             </div>
           </div>
         </div>
-{% endblock content %}
+<!-- You need an end block here - just remember to remove the underscores!
+{_% endblock content %_} 
+-->
 
 <!-- Specific Page JS goes HERE  -->
-{% block javascripts %}
+{% block page_javascripts %}{% endblock page_javascripts %}
 
-  <script>
-    $(document).ready(function() {
-      // Javascript method's body can be found in assets/js/demos.js
-      md.initDashboardPageCharts();
-
-    });
-  </script>
-
-{% endblock javascripts %}
+<!-- This endblock won't be here in your code - it's how we load in the example conent to the viewer.-->
+{% endblock example_content %} 

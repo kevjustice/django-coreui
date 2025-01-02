@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" data-coreui-theme="dark">
 {% block head %}{% include './includes/head.html' %}{% endblock head %}
-
+{% block page_stylesheets %}{{ page_stylesheets  }}{% endblock page_stylesheets %}
 <body class="">
   {% block sidebar %}{% include './includes/sidebar.html' %}{% endblock sidebar %}
   <div class="wrapper d-flex flex-column min-vh-100">
@@ -17,7 +17,7 @@
   </div>
   {% block corescripts %}
   <!-- CoreUI and necessary plugins-->
-  <script src="/static/modules/@coreui/coreui/dist/js/coreui.bundle.min.js"></script>
+ 
   <script src="/static/modules/simplebar/dist/simplebar.min.js"></script>
   <script>
     const header = document.querySelector('header.header');
@@ -30,7 +30,13 @@
     
   </script>
   {% endblock corescripts %}
-  {% block site_javascripts %}{% endblock site_javascripts %} 
-  {% block page_javascripts %}{% endblock page_javascripts %}    
+  <!-- Site JS -->
+  {% block site_javascripts %}{{ site_javascripts }}{% endblock site_javascripts %} 
+  <script src="/static/js/popovers.js"></script>
+  <script src="/static/js/toasts.js"></script>
+  <script src="/static/js/tooltips.js"></script>
+  <script src="/static/js/validate-forms.js"></script>
+  <!-- Page JS -->
+  {% block page_javascripts %}{{ page_javascripts }}{% endblock page_javascripts %}    
 </body>
 </html>

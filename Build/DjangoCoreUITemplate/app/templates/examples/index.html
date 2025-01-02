@@ -2,34 +2,95 @@
 
 {% block title %} Examples {% endblock %} 
 
-<!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block page_stylesheets %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+<style>
+    .code-view {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-radius: 4px;
+        position: relative;
+    }
+    pre {
+        margin: 0;
+        white-space: pre-wrap;
+    }
+    .copy-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+    .nav-tabs .nav-link {
+        cursor: pointer;
+    }
+    .code-container {
+        max-height: 500px;
+        overflow-y: auto;
+    }
+</style>
+{% endblock page_stylesheets %}
 
 {% block content %}
-
-<div class="container">
+<div class="container-fluid px-4">
     <div class="row">
+        <!-- Sidebar Column -->
         <div class="col-md-3">
-            <!-- Sidebar with example list -->
-            <div class="list-group">
-                {% for template in example_templates %}
-                    <a href="{{ template.url }}" 
-                       class="list-group-item list-group-item-action {% if template.path == template_path %}active{% endif %}">
-                        {{ template.name }}
-                    </a>
-                {% endfor %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Example Templates</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        {% for template in example_templates %}
+                            <a href="{{ template.url }}" 
+                               class="list-group-item list-group-item-action {% if template.path == template_path %}active{% endif %}">
+                                {{ template.name }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
         </div>
+
+        <!-- Main Content Column -->
         <div class="col-md-9">
-            <!-- Content area -->
             {% if template_path %}
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="mb-0">{{ template_path|title }}</h5>
-                        <small class="text-muted">Template: {{ current_template }}</small>
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                              <button class="nav-link active" id="home-tab" data-coreui-toggle="tab" data-coreui-target="#preview" type="button" role="tab" aria-controls="Preview" aria-selected="true">Preview</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                              <button class="nav-link" id="profile-tab" data-coreui-toggle="tab" data-coreui-target="#code" type="button" role="tab" aria-controls="code" aria-selected="false">View Code</button>
+                            </li>
+                        </ul>
                     </div>
                     <div class="card-body">
-                        {% block example_content %}{% endblock %}
+                        <div class="tab-content">
+                            <!-- Preview Tab -->
+                            <div class="tab-pane fade show active" id="preview" role="tabpanel" aria-labelledby="preview" tabindex="0">
+                                <h5 class="card-title">{{ template_path|title }}</h5>
+                                <p class="text-muted small">Template: {{ current_template }}</p>
+                                <hr>
+                                {% block example_content %}{% endblock %}
+                            </div>
+
+                            <!-- Code Tab -->
+                            <div class="tab-pane fade" id="code" role="tabpanel" aria-labelledby="code" tabindex="0">
+                                <h5 class="card-title">Source Code</h5>
+                                <p class="text-muted small">{{ current_template }}</p>
+                                <hr>
+                                <div class="code-view">
+                                    <button class="btn btn-sm btn-secondary copy-button" onclick="copyCode()">
+                                        <i class="fas fa-copy"></i> Copy
+                                    </button>
+                                    <div class="code-container">
+                                        <pre><code class="html">{{ template_content|escape }}</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             {% else %}
@@ -48,5 +109,41 @@
 </div>
 {% endblock content %}
 
-<!-- Specific Page JS goes HERE  -->
-{% block javascripts %}{% endblock javascripts %}
+{% block javascripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+<script>
+    // Initialize syntax highlighting
+    document.addEventListener('DOMContentLoaded', function() {
+        hljs.highlightAll();
+    });
+
+    // Copy code function
+    function copyCode() {
+        const code = document.querySelector('.code-view code').textContent;
+        navigator.clipboard.writeText(code).then(() => {
+            const copyButton = document.querySelector('.copy-button');
+            const originalText = copyButton.innerHTML;
+            
+            // Change button text/icon to indicate success
+            copyButton.innerHTML = '<i class="fas fa-check"></i> Copied!';
+            
+            // Reset button after 2 seconds
+            setTimeout(() => {
+                copyButton.innerHTML = originalText;
+            }, 2000);
+        }).catch(err => {
+            console.error('Failed to copy code:', err);
+            alert('Failed to copy code to clipboard');
+        });
+    }
+
+    // Optional: Add smooth transition between tabs
+    document.querySelectorAll('[data-bs-toggle="tab"]').forEach(tab => {
+        tab.addEventListener('shown.bs.tab', function (e) {
+            if (e.target.getAttribute('href') === '#code') {
+                hljs.highlightAll();
+            }
+        });
+    });
+</script>
+{% endblock javascripts %}

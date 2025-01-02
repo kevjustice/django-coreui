@@ -12,7 +12,7 @@
     <meta name="description" content="{% block meta_description %}CoreUI - Open Source Bootstrap Admin Template{% endblock meta_description %}">
     <meta name="author" content="Kevin Justice">
     <title>
-      {% block title %}{% endblock %}
+      {% block title %}{{ title }}{% endblock %}
     </title>
     
     <!-- Standard favicon [[use https://www.favicon-generator.org/ to generate them!]] -->
@@ -44,8 +44,18 @@
     <link rel="stylesheet" href="/static/css/simplebar.css">
     <!-- Main styles for this application-->
     <link href="/static/css/style.css" rel="stylesheet">
+    
+    <script src="/static/modules/@coreui/coreui/dist/js/coreui.bundle.js"></script>
+    
+    
+    
+    <script src="/static/js/config.js"></script>
+    <script src="/static/js/color-modes.js"></script>
     <!-- CoreUI icons -->
     <link rel="stylesheet" href="/static/modules/@coreui/icons/css/all.min.css"> 
-    {% block head_stylesheets %}{% endblock head_stylesheets %}
-    {% block page_stylesheets %}{% endblock page_stylesheets %}
+    <link href="/static/css/djangocoreui.css" rel="stylesheet">
+    <!-- Head Stylesheets -->
+    {% block head_stylesheets %}{{ head_stylesheets }}{% endblock head_stylesheets %}
+    <!-- Page Stylesheets -->
+    {% block page_stylesheets %}{{ page_stylesheets }}{% endblock page_stylesheets %}
   </head>

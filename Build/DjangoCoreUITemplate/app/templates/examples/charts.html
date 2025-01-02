@@ -1,10 +1,19 @@
-{% extends "../base.html" %}
+<!-- For the next extends, you'll want to use base.html instead! -->
+{% extends "examples/index.html" %}
+
+<!-- This block won't be here in your code - it's how we load in the example conent to the viewer.-->
+{% block example_content %}
 
 {% block title %} Dashboard {% endblock %} 
 
 <!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
-{% block content %}
+{% block page_stylesheets %}
+<link href="/static/modules/@coreui/chartjs/dist/css/coreui-chartjs.css" rel="stylesheet">
+{% endblock page_stylesheets %}
+
+<!-- You need another block here - just remember to remove the underscores!
+{_% block content %_} 
+-->
 
 
         <div class="container-lg px-4">
@@ -167,18 +176,26 @@
             </div>
           </div>
         </div>
-{% endblock content %}
+        
+<!-- You need an end block here - just remember to remove the underscores!
+{_% endblock content %_} 
+-->
 
 <!-- Specific Page JS goes HERE  -->
-{% block javascripts %}
-
+{% block page_javascripts %}
+<script src="/static/modules/chart.js/dist/chart.umd.js"></script>
+<script src="/static/modules/@coreui/chartjs/dist/js/coreui-chartjs.js"></script>        
+<script src="/static/js/charts.js"></script>
   <script>
     $(document).ready(function() {
-      // Javascript method's body can be found in assets/js/demos.js
+      
       md.initDashboardPageCharts();
 
     });
   </script>
 
-{% endblock javascripts %}
+{% endblock page_javascripts %}
+
+<!-- This endblock won't be here in your code - it's how we load in the example conent to the viewer.-->
+{% endblock example_content %}
         

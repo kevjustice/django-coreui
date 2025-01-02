@@ -1,11 +1,18 @@
-{% extends "../base-min.html" %}
+<!-- For the next extends, you'll want to use base-min.html instead! -->
+{% extends "examples/index.html" %}
+
+<!-- This block won't be here in your code - it's how we load in the example conent to the viewer.-->
+{% block example_content %}
 
 {% block title %} Page 404 {% endblock %} 
 
 <!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block page_stylesheets %}{% endblock page_stylesheets %}
 
-{% block content %}
+<!-- You need another block here - just remember to remove the underscores!
+{_% block content %_} 
+-->
+
 
   <div class="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
     <div class="container">
@@ -28,8 +35,13 @@
     </div>
   </div>
 
+<!-- You need an end block here - just remember to remove the underscores!
+{_% endblock content %_} 
+-->
 
-{% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
-{% block javascripts %}{% endblock javascripts %}
+{% block page_javascripts %}{% endblock page_javascripts %}
+
+<!-- This endblock won't be here in your code - it's how we load in the example conent to the viewer.-->
+{% endblock example_content %}

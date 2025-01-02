@@ -27,6 +27,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-4)56uhk#wf+cm6
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+DJDTToolbar = False 
 ENVIRONMENT = os.environ.get('ENVIRONMENT', 'development')
 
 # SECURITY SETTINGS
@@ -67,8 +68,9 @@ DEFAULT_APP_SETTINGS = {
             alert('You really should look at the settings.py file and update the defaults!');
         </script>
     """),
-    'menu_user_interactions_enabled': False,
-    'menu_user_contrast_disabled': True,
+    'menu_breadcurmbs_disabled': False,
+    'menu_user_interactions_enabled': True,
+    'menu_user_contrast_disabled': False,
     'menu_user_avatar_menu_disabled': False,
     'top_menu_disabled': False,
     'active_theme': 'dark',
@@ -292,7 +294,7 @@ if not os.path.exists(LOGS_DIR):
     os.makedirs(LOGS_DIR)
 
 # Development-specific settings
-if DEBUG:
+if DJDTToolbar:
     INSTALLED_APPS += [
         'debug_toolbar',
     ]

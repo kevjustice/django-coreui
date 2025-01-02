@@ -1,5 +1,6 @@
 django
 psycopg
+psycopg_binary
 python-dotenv
 django-debug-toolbar # for development
 #celery

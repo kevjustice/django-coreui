@@ -153,18 +153,44 @@ class ExampleTemplateView(BaseContextMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        template_path = self.kwargs.get('template_path', '')
         base_context = self.get_base_context(self.request)
-        base_context['title'] = f"{base_context['title']}Dashboard"
+        base_context['title'] = f"{base_context['title']} Example"
+        
+        # Get template content
+        template_content = self.get_template_content(template_path)
+        print(f"Template Path: {template_path}")  # Debug
+        print(f"Template Content Length: {len(template_content) if template_content else 0}")  # Debug
+        
         context.update(base_context)
         context.update({
-            'template_path': self.kwargs.get('template_path', ''),
+            'template_content': template_content,
+            'template_path': template_path,
             'example_templates': self.get_example_templates(),
-            'current_template': (f"examples/{self.kwargs.get('template_path')}.html" 
-                               if self.kwargs.get('template_path') 
-                               else None)
+            'current_template': (f"examples/{template_path}.html" 
+                            if template_path 
+                            else None)
         })
+        
+        # Debug print
+        print(f"Context keys: {context.keys()}")
         return context
 
+    def get_template_content(self, template_path):
+        """Get the actual content of the template file"""
+        if not template_path:
+            return None
+            
+        template_file = Path(settings.BASE_DIR) / 'templates' / f"examples/{template_path}.html"
+        try:
+            with open(template_file, 'r', encoding='utf-8') as f:
+                return f.read()
+        except FileNotFoundError:
+            print(f"Template file not found: {template_file}")  # Debug
+            return None
+        except Exception as e:
+            print(f"Error reading template: {e}")  # Debug
+            return None
 
 class CustomLoginView(LoginView):
     form_class = CustomLoginForm
