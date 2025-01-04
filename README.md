@@ -71,7 +71,10 @@ $ ./venv/scripts/activate.sh
 
 # Load up requirements
 $ pip install --no-cache-dir -r /requirements.txt 
+
+# setup defaults
 $ cd app
+$ cp template.env .env
 
 # Apply database migrations
 $ python manage.py makemigrations
@@ -80,3 +83,30 @@ $ python manage.py migrate
 # Start development server
 $ python manage.py runserver 0.0.0.0:8000
 ```
+
+## Quick Start
+
+Changes to consider before running:
+- Make changes to .env file from template
+- Review all variables in app/settings.py
+- Review the default menu system in defaults.py
+
+## Overview
+
+Coming Soon
+
+## Full documentation
+
+Coming soon
+
+## Getting help 
+
+Fill out a Github issue.
+
+## About
+
+I love technology.  I've been in the industry since the first use of PC's in a business environment.  Now I'm a full time professor in Cybersecurity, Web Development and more but still make sure to keep busy with projects.  
+
+This project was originally just going to be a template for an app I want to build.  Then I thought - why not make it so that anyone can benefit from my work.  So here it is!
+
+--Kevin
