@@ -33,7 +33,6 @@
 - **Custom User Administration** built in.
 - **Automatic Admin User** on first run
 - **CoreUI** includes [SO MUCH MORE](https://github.com/coreui/coreui-free-bootstrap-admin-template)
-    - 
 
     | Default Theme | 
     | --- | 
