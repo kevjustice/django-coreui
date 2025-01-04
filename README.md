@@ -1,6 +1,6 @@
 <p align="center">
 	<a href="https://github.com/kevjustice/django-coreui">
-    <source srcset="https://raw.githubusercontent.com/kevjustice/django-coreui/refs/heads/main/Build/DjangoCoreUITemplate/app/static/assets/brand/django-coreui-logo.svg">
+    <img src="https://raw.githubusercontent.com/kevjustice/django-coreui/refs/heads/main/Build/DjangoCoreUITemplate/app/static/assets/brand/django-coreui-logo.svg"/>
 	</a>
 </p>
 
