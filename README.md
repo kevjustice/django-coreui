@@ -1,12 +1,12 @@
 <p align="center">
 	<a href="https://github.com/kevjustice/django-coreui">
-    <source srcset="https://raw.githubusercontent.com/Build/DjangoCoreUITemplate/app/static/assets/brand/django-coreui-logo.svg">
+    <source srcset="https://raw.githubusercontent.com/kevjustice/django-coreui/Build/DjangoCoreUITemplate/app/static/assets/brand/django-coreui-logo.svg">
 	</a>
 </p>
 
 
 <hr>
-<h3 align="center">Every site on HTTPS</h3>
+<h3 align="center">Django & CoreUI</h3>
 <p align="center">Django adaptation of the CoreUI Bootstrap 5 template.</p>
 <p align="center">
 	<a href="https://github.com/kevjustice/django-coreui/releases">Releases</a> ·
