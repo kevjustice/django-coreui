@@ -47,8 +47,7 @@
 
     CoreUI Bootstrap Admin Templates are built on top of CoreUI and CoreUI PRO UI components libraries, including all of these components. (Pro items below require CoreUI Pro Licensing.)
 
-<div style="display: flex;">
-<div style="flex: 50%;">
+<div style="column-count: 2;">
     - [Bootstrap Accordion](https://coreui.io/bootstrap/docs/components/accordion/)
     - [Bootstrap Alert](https://coreui.io/bootstrap/docs/components/alert/)
     - [Bootstrap Avatar](https://coreui.io/bootstrap/docs/components/avatar/)
@@ -74,9 +73,7 @@
     - [Bootstrap Input Group](https://coreui.io/bootstrap/docs/forms/input-group/)
     - [Bootstrap List Group](https://coreui.io/bootstrap/docs/components/list-group/)
     - [Bootstrap Loading Button](https://coreui.io/bootstrap/docs/components/loading-button/) **PRO**
-</div>
-<div style="flex: 50%;">
-   - [Bootstrap Modal](https://coreui.io/bootstrap/docs/components/modal/)
+    - [Bootstrap Modal](https://coreui.io/bootstrap/docs/components/modal/)
     - [Bootstrap Multi Select](https://coreui.io/bootstrap/docs/forms/multi-select/) **PRO**
     - [Bootstrap Navs & Tabs](https://coreui.io/bootstrap/docs/components/navs-tabs/)
     - [Bootstrap Navbar](https://coreui.io/bootstrap/docs/components/navbar/)
@@ -98,11 +95,6 @@
     - [Bootstrap Toast](https://coreui.io/bootstrap/docs/components/toast/)
     - [Bootstrap Tooltip](https://coreui.io/bootstrap/docs/components/tooltip/)
 </div>
-</div>
-
-    
-    
- 
 
 ## How to install
 
