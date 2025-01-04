@@ -1,6 +1,6 @@
 <p align="center">
 	<a href="https://github.com/kevjustice/django-coreui">
-		![Logo](Build/DjangoCoreUITemplate/app/static/assets/brand/django-coreui-logo.svg)
+    <source srcset="https://raw.githubusercontent.com/Build/DjangoCoreUITemplate/app/static/assets/brand/django-coreui-logo.svg">
 	</a>
 </p>
 
@@ -32,6 +32,7 @@
 - **Sessions** already setup and cached!
 - **Custom User Administration** built in.
 - **Automatic Admin User** on first run
+- **PostgreSQL** database support with psycopg2.
 - **CoreUI** includes [SO MUCH MORE](https://github.com/coreui/coreui-free-bootstrap-admin-template)
 
     | Default Theme | 
