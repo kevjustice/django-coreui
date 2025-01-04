@@ -1,6 +1,6 @@
 <p align="center">
 	<a href="https://github.com/kevjustice/django-coreui">
-		![Logo](build/DjangoCoreUITemplate/app/static/assets/brand/django-coreui-logo.svg)
+		![Logo](Build/DjangoCoreUITemplate/app/static/assets/brand/django-coreui-logo.svg)
 	</a>
 </p>
 
