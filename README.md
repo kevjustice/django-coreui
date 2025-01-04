@@ -47,35 +47,7 @@
 
     CoreUI Bootstrap Admin Templates are built on top of CoreUI and CoreUI PRO UI components libraries, including all of these components. (Pro items below require CoreUI Pro Licensing.)
 
-    |
-    - [Bootstrap Accordion](https://coreui.io/bootstrap/docs/components/accordion/)
-    |
-    - [Bootstrap Alert](https://coreui.io/bootstrap/docs/components/alert/)
-    |
-    |
-    - [Bootstrap Avatar](https://coreui.io/bootstrap/docs/components/avatar/)
-    |
-    - [Bootstrap Badge](https://coreui.io/bootstrap/docs/components/badge/)
-    |
-    |
-    - [Bootstrap Breadcrumb](https://coreui.io/bootstrap/docs/components/breadcrumb/)
-    - [Bootstrap Button](https://coreui.io/bootstrap/docs/components/button/)
-    - [Bootstrap Button Group](https://coreui.io/bootstrap/docs/components/button-group/)
-    - [Bootstrap Callout](https://coreui.io/bootstrap/docs/components/callout/)
-    - [Bootstrap Card](https://coreui.io/bootstrap/docs/components/card/)
-    - [Bootstrap Carousel](https://coreui.io/bootstrap/docs/components/carousel/)
-    - [Bootstrap Checkbox](https://coreui.io/bootstrap/docs/forms/checkbox/)
-    - [Bootstrap Close Button](https://coreui.io/bootstrap/docs/components/close-button/)
-    - [Bootstrap Calendar](https://coreui.io/bootstrap/docs/components/calendar/) **PRO**
-    - [Bootstrap Collapse](https://coreui.io/bootstrap/docs/components/collapse/)
-    - [Bootstrap Date Picker](https://coreui.io/bootstrap/docs/forms/date-picker/) **PRO**
-    - [Bootstrap Date Range Picker](https://coreui.io/bootstrap/docs/forms/date-range-picker/) **PRO**
-    - [Bootstrap Dropdown](https://coreui.io/bootstrap/docs/components/dropdown/)
-    - [Bootstrap Floating Labels](https://coreui.io/bootstrap/docs/forms/floating-labels/)
-    - [Bootstrap Footer](https://coreui.io/bootstrap/docs/components/footer/)
-    - [Bootstrap Header](https://coreui.io/bootstrap/docs/components/header/)
-    - [Bootstrap Image](https://coreui.io/bootstrap/docs/components/image/)
-    - [Bootstrap Input](https://coreui.io/bootstrap/docs/forms/input/)
+    - [Bootstrap Accordion](https://coreui.io/bootstrap/docs/components/accordion/)     - [Bootstrap Alert](https://coreui.io/bootstrap/docs/components/alert/)     - [Bootstrap Avatar](https://coreui.io/bootstrap/docs/components/avatar/)   - [Bootstrap Badge](https://coreui.io/bootstrap/docs/components/badge/)     - [Bootstrap Breadcrumb](https://coreui.io/bootstrap/docs/components/breadcrumb/)     - [Bootstrap Button](https://coreui.io/bootstrap/docs/components/button/)     - [Bootstrap Button Group](https://coreui.io/bootstrap/docs/components/button-group/)     - [Bootstrap Callout](https://coreui.io/bootstrap/docs/components/callout/)     - [Bootstrap Card](https://coreui.io/bootstrap/docs/components/card/)     - [Bootstrap Carousel](https://coreui.io/bootstrap/docs/components/carousel/)     - [Bootstrap Checkbox](https://coreui.io/bootstrap/docs/forms/checkbox/)     - [Bootstrap Close Button](https://coreui.io/bootstrap/docs/components/close-button/)     - [Bootstrap Calendar](https://coreui.io/bootstrap/docs/components/calendar/) **PRO**     - [Bootstrap Collapse](https://coreui.io/bootstrap/docs/components/collapse/)     - [Bootstrap Date Picker](https://coreui.io/bootstrap/docs/forms/date-picker/) **PRO**     - [Bootstrap Date Range Picker](https://coreui.io/bootstrap/docs/forms/date-range-picker/) **PRO**     - [Bootstrap Dropdown](https://coreui.io/bootstrap/docs/components/dropdown/)     - [Bootstrap Floating Labels](https://coreui.io/bootstrap/docs/forms/floating-labels/)     - [Bootstrap Footer](https://coreui.io/bootstrap/docs/components/footer/)     - [Bootstrap Header](https://coreui.io/bootstrap/docs/components/header/)     - [Bootstrap Image](https://coreui.io/bootstrap/docs/components/image/)     - [Bootstrap Input](https://coreui.io/bootstrap/docs/forms/input/)
     - [Bootstrap Input Group](https://coreui.io/bootstrap/docs/forms/input-group/)
     - [Bootstrap List Group](https://coreui.io/bootstrap/docs/components/list-group/)
     - [Bootstrap Loading Button](https://coreui.io/bootstrap/docs/components/loading-button/) **PRO**
