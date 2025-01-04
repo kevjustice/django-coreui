@@ -26,7 +26,6 @@
 .coverage.* 
 .dev.env
 .eggs/ 
-.env
 .env 
 .history
 .hypothesis/ 
