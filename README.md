@@ -47,11 +47,17 @@
 
     CoreUI Bootstrap Admin Templates are built on top of CoreUI and CoreUI PRO UI components libraries, including all of these components. (Pro items below require CoreUI Pro Licensing.)
 
-<div style="column-count: 2;">
+    |
     - [Bootstrap Accordion](https://coreui.io/bootstrap/docs/components/accordion/)
+    |
     - [Bootstrap Alert](https://coreui.io/bootstrap/docs/components/alert/)
+    |
+    |
     - [Bootstrap Avatar](https://coreui.io/bootstrap/docs/components/avatar/)
+    |
     - [Bootstrap Badge](https://coreui.io/bootstrap/docs/components/badge/)
+    |
+    |
     - [Bootstrap Breadcrumb](https://coreui.io/bootstrap/docs/components/breadcrumb/)
     - [Bootstrap Button](https://coreui.io/bootstrap/docs/components/button/)
     - [Bootstrap Button Group](https://coreui.io/bootstrap/docs/components/button-group/)
@@ -94,7 +100,7 @@
     - [Bootstrap Time Picker](https://coreui.io/bootstrap/docs/forms/time-picker/) **PRO**
     - [Bootstrap Toast](https://coreui.io/bootstrap/docs/components/toast/)
     - [Bootstrap Tooltip](https://coreui.io/bootstrap/docs/components/tooltip/)
-</div>
+
 
 ## How to install
 
