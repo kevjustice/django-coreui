@@ -2,12 +2,7 @@
 	<a href="https://github.com/kevjustice/django-coreui">
 		![Logo](build/DjangoCoreUITemplate/app/static/assets/brand/django-coreui-logo.svg)
 	</a>
-	<br>
-	<h3 align="center">a <a href="https://zerossl.com"><img src="https://user-images.githubusercontent.com/55066419/208327323-2770dc16-ec09-43a0-9035-c5b872c2ad7f.svg" height="28" style="vertical-align: -7.7px" valign="middle"></a> project</h3>
 </p>
-
-# django-coreui
-Django adaptation of the CoreUI Bootstrap 5 template
 
 
 <hr>
@@ -15,7 +10,7 @@ Django adaptation of the CoreUI Bootstrap 5 template
 <p align="center">Django adaptation of the CoreUI Bootstrap 5 template.</p>
 <p align="center">
 	<a href="https://github.com/kevjustice/django-coreui/releases">Releases</a> ·
-	<a href="https://github.com/kevjustice/django-coreui">Documentation</a> ·
+	<a href="https://github.com/kevjustice/django-coreui">Documentation</a>
 </p>
 
 ### Menu
@@ -40,18 +35,20 @@ Django adaptation of the CoreUI Bootstrap 5 template
 - **CoreUI** includes [SO MUCH MORE](https://github.com/coreui/coreui-free-bootstrap-admin-template)
     - 
 
-    | Default Theme | Light Theme |
-    | --- | --- |
+    | Default Theme | 
+    | --- | 
     | [![CoreUI PRO Bootstrap Admin Template](https://coreui.io/images/templates/coreui_pro_default_light_dark.webp)](https://coreui.io/product/bootstrap-dashboard-template/?theme=default)
 
-    ## CoreUI Icons (522 Free icons) - Premium designed free icon set with marks in SVG, Webfont and raster formats.
+    # CoreUI Icons (522 Free icons) - Premium designed free icon set with marks in SVG, Webfont and raster formats.
 
     CoreUI Icons are beautifully crafted symbols for common actions and items. You can use them in your digital products for web or mobile app. Ready-to-use fonts and stylesheets that work with your favorite frameworks.
 
-    ## Components
+    # Components
 
     CoreUI Bootstrap Admin Templates are built on top of CoreUI and CoreUI PRO UI components libraries, including all of these components. (Pro items below require CoreUI Pro Licensing.)
 
+<div style="display: flex;">
+<div style="flex: 50%;">
     - [Bootstrap Accordion](https://coreui.io/bootstrap/docs/components/accordion/)
     - [Bootstrap Alert](https://coreui.io/bootstrap/docs/components/alert/)
     - [Bootstrap Avatar](https://coreui.io/bootstrap/docs/components/avatar/)
@@ -77,7 +74,9 @@ Django adaptation of the CoreUI Bootstrap 5 template
     - [Bootstrap Input Group](https://coreui.io/bootstrap/docs/forms/input-group/)
     - [Bootstrap List Group](https://coreui.io/bootstrap/docs/components/list-group/)
     - [Bootstrap Loading Button](https://coreui.io/bootstrap/docs/components/loading-button/) **PRO**
-    - [Bootstrap Modal](https://coreui.io/bootstrap/docs/components/modal/)
+</div>
+<div style="flex: 50%;">
+   - [Bootstrap Modal](https://coreui.io/bootstrap/docs/components/modal/)
     - [Bootstrap Multi Select](https://coreui.io/bootstrap/docs/forms/multi-select/) **PRO**
     - [Bootstrap Navs & Tabs](https://coreui.io/bootstrap/docs/components/navs-tabs/)
     - [Bootstrap Navbar](https://coreui.io/bootstrap/docs/components/navbar/)
@@ -98,6 +97,12 @@ Django adaptation of the CoreUI Bootstrap 5 template
     - [Bootstrap Time Picker](https://coreui.io/bootstrap/docs/forms/time-picker/) **PRO**
     - [Bootstrap Toast](https://coreui.io/bootstrap/docs/components/toast/)
     - [Bootstrap Tooltip](https://coreui.io/bootstrap/docs/components/tooltip/)
+</div>
+</div>
+
+    
+    
+ 
 
 ## How to install
 
