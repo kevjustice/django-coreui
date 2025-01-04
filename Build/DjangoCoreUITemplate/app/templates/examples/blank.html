@@ -1,0 +1,27 @@
+<!-- For the next extends, you'll want to use base.html instead! -->
+{% extends "examples/index.html" %}
+
+<!-- This block won't be here in your code - it's how we load in the example conent to the viewer.-->
+{% block example_content %}
+
+{% block title %} Dashboard {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block page_stylesheets %}{% endblock page_stylesheets %}
+
+
+<!-- You need another block here - just remember to remove the underscores!
+{_% block content %_} 
+-->
+
+   
+
+<!-- You need an end block here - just remember to remove the underscores!
+{_% endblock content %_} 
+-->
+
+<!-- Specific Page JS goes HERE  -->
+{% block page_javascripts %}{% endblock page_javascripts %}
+
+<!-- This endblock won't be here in your code - it's how we load in the example conent to the viewer.-->
+{% endblock example_content %} 

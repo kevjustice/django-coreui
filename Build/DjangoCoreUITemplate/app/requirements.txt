@@ -1,0 +1,17 @@
+django
+psycopg
+psycopg_binary
+python-dotenv
+django-debug-toolbar # for development
+#celery
+#django-celery-beat
+#redis
+#requests
+#selenium 
+#wget
+#docker
+#whitenoise
+#django-widget-tweaks
+#django-admin-interface
+#django-extensions
+#gunicorn

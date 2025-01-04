@@ -46,7 +46,6 @@
 ENV/ 
 __pycache__/
 bin/
-build/
 celerybeat-schedule.* 
 coverage.xml 
 db.sqlite3

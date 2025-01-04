@@ -1,0 +1,20 @@
+{% load menu_tags %}
+{% if item.item_type.value == 'header' %}
+    <div class="dropdown-header bg-body-tertiary text-body-secondary fw-semibold my-2">{{ item.menu_text }}</div>
+{% elif item.item_type.value == 'separator' %}
+    <div class="dropdown-divider"></div>
+{% elif item.item_type.value == 'link' or item.item_type.value == 'altlink' %}
+    <a class="dropdown-item" href="{{ item.url }}">
+        {% if item.icon %}
+            <svg class="icon me-2">
+                <use xlink:href="{{ item.current_icon }}"></use>
+            </svg>
+        {% endif %}
+        <span class="{{ item.menu_class }}">{{ item.menu_text }}</span>
+        {% if item.secondary_text %}
+            <span class="{{ item.secondary_class }}">{{ item.secondary_text }}</span>
+        {% endif %}
+    </a>
+{% elif item.item_type.value == 'dropdown' %}
+    <!-- NOT IMPLEMENTED -->
+{% endif %}
