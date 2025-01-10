@@ -75,12 +75,14 @@ DEFAULT_APP_SETTINGS = {
             alert('You really should look at the settings.py file and update the defaults!');
         </script>
     """),
-    'menu_breadcurmbs_disabled': False,
-    'menu_user_interactions_enabled': True,
+    'menu_breadcrumbs_disabled': False,
+    'menu_header_leftmenu_disabled': False,
+    'menu_user_interactions_disabled': True,
     'menu_user_contrast_disabled': False,
     'menu_user_avatar_menu_disabled': False,
     'top_menu_disabled': False,
-    'active_theme': 'dark',
+    'menu_sidebar_disabled': True,
+    'active_theme': 'dark',\
     'max_breadcrumbs': 5,
 }
 

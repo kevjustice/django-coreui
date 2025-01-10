@@ -94,7 +94,7 @@ class HomeView(BaseContextMixin, TemplateView):
         base_context = self.get_base_context(self.request)
         base_context.update({
             'content': 'homepage html default here!',
-            'menu_user_interactions_enabled': False,
+            'menu_user_interactions_disabled': True,
             'menu_user_avatar_menu_disabled': True,
             'title': f"{base_context['title']}Home"
         })

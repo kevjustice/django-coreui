@@ -50,7 +50,6 @@ coverage.xml
 db.sqlite3
 dev.env 
 develop-eggs/ 
-dist/
 downloads/ 
 eggs/
 env.bak/ 

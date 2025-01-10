@@ -17,7 +17,7 @@ class BaseContextMixin:
             'header_left_menu': menu_manager.get_menu('header_left_menu', request.user.is_authenticated),
             'header_right_menu': menu_manager.get_menu('header_right_menu', request.user.is_authenticated),
             'user_menu': menu_manager.get_menu('user_menu', request.user.is_authenticated),
-            'menu_user_interactions_enabled': settings.DEFAULT_APP_SETTINGS['menu_user_interactions_enabled'],
+            'menu_user_interactions_disabled': settings.DEFAULT_APP_SETTINGS['menu_user_interactions_disabled'],
             'menu_user_contrast_disabled': settings.DEFAULT_APP_SETTINGS['menu_user_contrast_disabled'],
             'menu_user_avatar_menu_disabled': settings.DEFAULT_APP_SETTINGS['menu_user_avatar_menu_disabled'],
             'settings': all_settings,

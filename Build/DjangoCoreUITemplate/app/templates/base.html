@@ -3,7 +3,9 @@
 {% block head %}{% include './includes/head.html' %}{% endblock head %}
 {% block page_stylesheets %}{{ page_stylesheets  }}{% endblock page_stylesheets %}
 <body class="">
-  {% block sidebar %}{% include './includes/sidebar.html' %}{% endblock sidebar %}
+  {% if not menu_sidebar_disabled %}
+    {% block sidebar %}{% include './includes/sidebar.html' %}{% endblock sidebar %}
+  {% endif %}
   <div class="wrapper d-flex flex-column min-vh-100">
     {% block header %}{% include './includes/header.html' %}{% endblock header %}
     <div class="body flex-grow-1">
