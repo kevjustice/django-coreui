@@ -29,10 +29,11 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-4)56uhk#wf+cm6
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
-DJDTToolbar = False 
+DJDTToolbar = True 
 ENVIRONMENT = os.environ.get('ENVIRONMENT', 'development')
 
 # SECURITY SETTINGS
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Sessions will clear when browser closes
 DISABLE_REGISTRATION = os.environ.get('DISABLE_REGISTRATION', 'False') == 'True'
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "127.0.0.1").split(",")
 SECURE_SSL_REDIRECT = not DEBUG
@@ -75,13 +76,15 @@ DEFAULT_APP_SETTINGS = {
             alert('You really should look at the settings.py file and update the defaults!');
         </script>
     """),
+    'header_disabled': False,
     'menu_breadcrumbs_disabled': False,
     'menu_header_leftmenu_disabled': False,
-    'menu_user_interactions_disabled': True,
+    'menu_user_interactions_disabled': False,
     'menu_user_contrast_disabled': False,
     'menu_user_avatar_menu_disabled': False,
     'top_menu_disabled': False,
-    'menu_sidebar_disabled': True,
+    'footer_disabled': False,
+    'menu_sidebar_disabled': False,
     'active_theme': 'dark',\
     'max_breadcrumbs': 5,
 }
@@ -108,6 +111,8 @@ MIDDLEWARE = [
     'app.middleware.middleware.BreadcrumbMiddleware',
     'app.middleware.middleware.MenuMiddleware',
     'app.middleware.initial_setup.InitialSetupMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'app.middleware.middleware.CacheControlMiddleware',
 ]
 
 ROOT_URLCONF = 'app.urls'
@@ -131,6 +136,13 @@ TEMPLATES = [
         },
     },
 ]
+
+# Configure whitenoise
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+WHITENOISE_USE_FINDERS = True
+WHITENOISE_AUTOREFRESH = True
+WHITENOISE_MAX_AGE = 31536000  # 1 year in seconds
+WHITENOISE_COMPRESSION_ENABLED = True
 
 WSGI_APPLICATION = 'app.wsgi.application'
 
@@ -246,13 +258,15 @@ DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'webmaster@localhost')
 # SESSION CONFIGURATION
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 SESSION_COOKIE_AGE = 1209600  # 2 weeks in seconds
-SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # AUTHENTICATION SETTINGS
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 REGISTER_URL = '/register'
+
+
 
 # LOGGING CONFIGURATION
 LOGGING = {
@@ -272,6 +286,7 @@ LOGGING = {
         'console': {
             'class': 'logging.StreamHandler',
             'formatter': 'verbose',
+            'level': 'DEBUG',
         },
         'file': {
             'class': 'logging.FileHandler',
@@ -280,6 +295,11 @@ LOGGING = {
         },
     },
     'loggers': {
+        'django.server': {  # This specifically targets the development server logs
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
         'django': {
             'handlers': ['console', 'file'],
             'level': os.environ.get('DJANGO_LOG_LEVEL', 'INFO'),
@@ -288,6 +308,11 @@ LOGGING = {
         'app': {
             'handlers': ['console', 'file'],
             'level': 'INFO',
+            'propagate': False,
+        },
+        'app.utilities.menu_manager': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
             'propagate': False,
         },
     },

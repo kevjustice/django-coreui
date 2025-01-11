@@ -9,7 +9,7 @@ from django.contrib.auth import views as auth_views
 from django.contrib.auth.models import User
 from django.core.management import call_command
 from app import views
-from .views import ExampleTemplateView
+from .views import ExampleTemplateView, CustomLogoutView
 
 # Run initial setup check
 #try:
@@ -37,8 +37,8 @@ urlpatterns = [
     
     # Authentication URLs
     path('login/', views.CustomLoginView.as_view(),name='login'),
-    path('logout/', views.logout_view, name='logout'),
-    path('user/logout/', views.logout_view, name='user_logout'),  # Alias for backward compatibility
+    path('logout/', views.CustomLogoutView.as_view(), name='logout'),
+    
     
     # User Management URLs
     path('users/', views.UserListView.as_view(), name='user_list'),

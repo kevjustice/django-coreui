@@ -33,6 +33,8 @@ class MenuItem:
     parent_menu: Optional['Menu'] = field(default=None, repr=False)
 
     def __post_init__(self):
+        
+
         """Convert string values to enums if necessary"""
         if isinstance(self.item_type, str):
             try:
@@ -52,6 +54,13 @@ class MenuItem:
             except ValueError:
                 self.auth_requirement = AuthRequirement.ALL
 
+    def set_parent_menu(self, parent_menu: 'Menu'):
+        """Set parent menu and propagate to children"""
+        self.parent_menu = parent_menu
+        if self.item_type == MenuItemType.DROPDOWN:
+            for item in self.items:
+                item.set_parent_menu(parent_menu)
+
     def mark_parent_dirty(self):
         """Mark parent menu as dirty"""
         if self.parent_menu:
@@ -62,6 +71,10 @@ class MenuItem:
         """Create a MenuItem from a dictionary"""
         data_copy = data.copy()
         items_data = data_copy.pop('items', [])
+
+         # Ensure order is an integer
+        if 'order' in data_copy:
+            data_copy['order'] = int(data_copy['order'])
         
         if 'item_type' in data_copy:
             if isinstance(data_copy['item_type'], MenuItemType):
@@ -76,6 +89,7 @@ class MenuItem:
                 data_copy['auth_requirement'] = str(data_copy['auth_requirement']).lower()
 
         item = cls(**data_copy)
+        items_data = sorted(items_data, key=lambda x: x.get('order', 0))
         item.items = [cls.from_dict(item_data) for item_data in items_data]
         return item
 
@@ -126,7 +140,9 @@ class MenuItem:
         if position is not None:
             self.items.insert(position, item)
         else:
+            # If no position specified, add to end and sort by order
             self.items.append(item)
+            self.items.sort(key=lambda x: x.order)
             
         self.mark_parent_dirty()
 
@@ -149,7 +165,35 @@ class Menu:
     _version: int = field(default=0, init=False)
 
     def __post_init__(self):
-        self._set_parent_recursive(self.items)
+        self._set_parent_references()
+        self._sort_items()
+
+    def _set_parent_references(self):
+        """Set parent menu references for all items"""
+        for item in self.items:
+            item.set_parent_menu(self)
+
+    def _sort_items(self):
+        """Sort all items by order"""
+        def sort_recursive(items: List[MenuItem]):
+            #logger.debug("Before sorting:")
+            #for item in items:
+                #logger.debug(f"Item: {item.id}, Order: {item.order}")
+            
+            sorted_items = sorted(items, key=lambda x: (x.order, x.id))
+            
+            #logger.debug("After sorting:")
+            #for item in sorted_items:
+                #logger.debug(f"Item: {item.id}, Order: {item.order}")
+            
+            items.clear()
+            items.extend(sorted_items)
+            
+            for item in items:
+                if item.item_type == MenuItemType.DROPDOWN and item.items:
+                    sort_recursive(item.items)
+        
+        sort_recursive(self.items)
 
     def _set_parent_recursive(self, items):
         """Recursively set parent menu for nested items"""
@@ -171,8 +215,9 @@ class Menu:
 
     def add_item(self, item: MenuItem):
         """Add an item and set its parent reference"""
-        item.parent_menu = self
+        item.set_parent_menu(self)
         self.items.append(item)
+        self._sort_items()
         self.mark_dirty()
 
     def to_dict(self) -> Dict:
@@ -185,11 +230,14 @@ class Menu:
     @classmethod
     def from_dict(cls, data: Dict) -> 'Menu':
         menu_id = data.get('menu_id') or data.get('id')
+        # Sort items before creating menu
+        items_data = sorted(data.get('items', []), key=lambda x: x.get('order', 0))
         menu = cls(
             menu_id=menu_id,
-            items=[MenuItem.from_dict(item) for item in data.get('items', [])]
+            items=[MenuItem.from_dict(item) for item in items_data]
         )
         menu._version = data.get('version', 0)
+        menu._sort_items()  # Ensure everything is sorted
         return menu
 
 class MenuManager:
@@ -234,7 +282,7 @@ class MenuManager:
 
         def filter_items(items: List[MenuItem]) -> List[MenuItem]:
             filtered = []
-            for item in items:
+            for item in sorted(items, key=lambda x: x.order):  # Sort while filtering
                 if ((item.auth_requirement == AuthRequirement.ALL) or
                     (user_authenticated and item.auth_requirement == AuthRequirement.AUTH_ONLY) or
                     (not user_authenticated and item.auth_requirement == AuthRequirement.UNAUTH_ONLY)):
@@ -284,7 +332,7 @@ class MenuManager:
         return self._get_menu_cached(menu_id, user_authenticated, cache_key)
 
     def create_menu(self, menu_id: str, name: str):
-        """Create a new menu or update if it doesn't exist"""
+        """Create a new menu"""
         if not menu_id:
             raise ValueError("Menu ID cannot be empty")
         
@@ -293,17 +341,24 @@ class MenuManager:
             new_menu = Menu(menu_id=menu_id, items=[])
             new_menu.mark_clean()
             self._menus[menu_id] = new_menu
-            self._save_menus()
 
     def _reorder_menu(self, menu_id: str):
-        """Reorder menu items by order field"""
+        """Reorder menu items by order field recursively"""
+        def sort_items(items: List[MenuItem]):
+            # Sort current level
+            items.sort(key=lambda x: x.order)
+            # Recursively sort children
+            for item in items:
+                if item.item_type == MenuItemType.DROPDOWN and item.items:
+                    sort_items(item.items)
+
         if menu_id in self._menus:
-            self._menus[menu_id].items.sort(key=lambda x: x.order)
+            sort_items(self._menus[menu_id].items)
             self._menus[menu_id].mark_dirty()
 
     def add_item(self, menu_id: str, item: MenuItem, 
-                position: MenuPosition = MenuPosition.BOTTOM,
-                relative_to: Optional[str] = None):
+            position: MenuPosition = MenuPosition.BOTTOM,
+            relative_to: Optional[str] = None):
         """Add a menu item at specified position"""
         if menu_id not in self._menus:
             raise ValueError(f"Menu '{menu_id}' does not exist")
@@ -311,20 +366,22 @@ class MenuManager:
         menu = self._menus[menu_id]
         item.parent_menu = menu
         
-        if position == MenuPosition.TOP:
-            min_order = min((item.order for item in menu.items), default=0)
-            item.order = min_order - 10
-        elif position == MenuPosition.BOTTOM:
-            max_order = max((item.order for item in menu.items), default=0)
-            item.order = max_order + 10
-        elif position in (MenuPosition.BEFORE, MenuPosition.AFTER) and relative_to:
-            for existing in menu.items:
-                if existing.id == relative_to:
-                    if position == MenuPosition.BEFORE:
-                        item.order = existing.order - 5
-                    else:  # AFTER
-                        item.order = existing.order + 5
-                    break
+        # Only modify order if it's not already set
+        if item.order == 0:
+            if position == MenuPosition.TOP:
+                min_order = min((item.order for item in menu.items), default=0)
+                item.order = min_order - 10
+            elif position == MenuPosition.BOTTOM:
+                max_order = max((item.order for item in menu.items), default=0)
+                item.order = max_order + 10
+            elif position in (MenuPosition.BEFORE, MenuPosition.AFTER) and relative_to:
+                for existing in menu.items:
+                    if existing.id == relative_to:
+                        if position == MenuPosition.BEFORE:
+                            item.order = existing.order - 5
+                        else:  # AFTER
+                            item.order = existing.order + 5
+                        break
 
         menu.add_item(item)
         self._reorder_menu(menu_id)
@@ -345,6 +402,10 @@ class MenuManager:
                 for menu_item in items:
                     if menu_item.id == parent_id:
                         if menu_item.item_type == MenuItemType.DROPDOWN:
+                            # Set order if not specified
+                            if item.order == 0:
+                                max_order = max((i.order for i in menu_item.items), default=0)
+                                item.order = max_order + 10
                             menu_item.add_item(item)
                             return True
                         return False
@@ -354,6 +415,7 @@ class MenuManager:
                 return False
 
             if add_to_dropdown(self._menus[menu_id].items):
+                self._reorder_menu(menu_id)  # Make sure to reorder after adding
                 self._save_menus()
 
     def initialize_default_menus(self):
@@ -364,18 +426,20 @@ class MenuManager:
         self._cache.clear()
         
         for menu_id, menu_config in DEFAULT_MENUS.items():
-            self.create_menu(menu_id, menu_config.get('menu_id', menu_config.get('id')))
-            for item_data in menu_config['items']:
-                menu_item = MenuItem.from_dict(item_data)
-                self.add_item(menu_id, menu_item)
+            # Create the menu directly with all items at once
+            menu = Menu.from_dict(menu_config)
+            self._menus[menu_id] = menu
         
         self._save_menus()
 
     @classmethod
     def ensure_default_menus(cls, session_manager: UserSessionManager):
         """Ensure default menus exist in session"""
+        #logger.debug(f"Checking session for menus: {list(session_manager.session.keys())}")
         if 'menus' not in session_manager.session:
+            #logger.warning("No menus found in session - initializing defaults")
             menu_manager = cls(session_manager)
             menu_manager.initialize_default_menus()
             return menu_manager
+        #logger.debug("Found existing menus in session")
         return cls(session_manager)

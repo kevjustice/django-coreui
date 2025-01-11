@@ -2,18 +2,19 @@
 Django views for the application
 """
 from functools import wraps
-from django.http import HttpResponse, Http404, JsonResponse
-from django.contrib.auth import logout, update_session_auth_hash, get_user_model
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth import logout, update_session_auth_hash, get_user_model
+from django.contrib.messages import get_messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError, PermissionDenied
+from django.http import HttpResponse, Http404, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template import TemplateDoesNotExist
 from django.template.loader import get_template
@@ -205,6 +206,84 @@ class CustomLoginView(LoginView):
 
     def get_success_url(self):
         return self.success_url
+
+class CustomLogoutView(LogoutView):
+    """
+    Custom logout view that clears session data and handles logout
+    """
+    # Where to redirect after logout
+    #next_page = reverse_lazy('login')  # Redirect to login page after logout
+    http_method_names = ['get', 'post']  # Allow both GET and POST methods
+    
+    # Optional: custom template if you want to show a goodbye message
+    template_name = 'accounts/logout.html'
+    redirect_field_name = None
+
+    #def get(self, request, *args, **kwargs):
+    #    return self.post(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            # Clear all existing messages
+            storage = get_messages(request)
+            for message in storage:
+                # Iterate through messages to clear them
+                pass  # This will clear them as we iterate
+
+            try:
+                # Clear session if needed
+                session_manager = UserSessionManager(request)
+                session_manager.clear_all()
+            except Exception as e:
+                logger.error(f"Error clearing session: {e}")
+
+            
+            
+            # Perform logout
+            logout(request)
+            
+            # Add success message
+            messages.success(request, "You have been successfully logged out.")
+            
+            # Show the logout template
+            return self.render_to_response(self.get_context_data())
+            
+        # If user is already logged out, redirect to login
+        return redirect('login')
+    
+    # def get_next_page(self):
+    #     """Override to customize redirect behavior"""
+    #     next_page = self.request.GET.get('next')
+    #     if next_page:
+    #         return next_page
+    #     return super().get_next_page()
+
+    # def dispatch(self, request, *args, **kwargs):
+    #     """Handle the logout process"""
+    #     if request.user.is_authenticated:
+    #         try:
+    #             # Clear session settings
+    #             session_manager = UserSessionManager(request)
+    #             session_manager.clear_all()
+                
+    #             # Optional: Add a success message
+    #             messages.success(request, "You have been successfully logged out.")
+                
+    #         except Exception as e:
+    #             # Log the error but don't prevent logout
+    #             messages.warning(request, "There was an issue clearing your settings.")
+                
+    #     return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        """Add extra context for the template"""
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'title': 'Logged Out',
+            'site_name': 'Your Site Name',
+            # Add any other context you need
+        })
+        return context        
 
 @method_decorator(registration_enabled, name='dispatch')    
 class UserRegister(CreateView):

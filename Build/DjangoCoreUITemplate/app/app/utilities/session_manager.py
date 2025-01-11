@@ -1,36 +1,82 @@
+# session_manager.py
 from typing import Any, Dict, Optional
 from django.conf import settings
 from django.urls import resolve
 from urllib.parse import urlparse
+from django.contrib import messages
+from django.contrib.messages import get_messages
+from datetime import datetime
 import re
+import logging
+
+logger = logging.getLogger(__name__)
 
 class UserSessionManager:
     """Manage user session data"""
-    
+
     def __init__(self, request):
-        self.session = request.session
+        self.session = getattr(request, 'session', None)
         self.modified = False
         
+        # If no session is available, use a dummy session
+        if self.session is None:
+            logger.debug("No session available, using default settings")
+            self._use_default_settings()
+            return
+
+        # Check settings version and reset if needed
+        current_settings = self.session.get('app_settings', {})
+        if current_settings.get('settings_version') != settings.APP_SETTING_ID:
+            logger.debug("Settings version mismatch, reinitializing")
+            self.initialize_settings()
+            return
+
         # Initialize settings if they haven't been set yet
         if 'app_settings' not in self.session:
+            logger.debug("Initializing settings in session")
             self.initialize_settings()
+    
+    def _use_default_settings(self):
+        """Use default settings when no session is available"""
+        self._dummy_session = True
+        self._settings = settings.DEFAULT_APP_SETTINGS.copy()
+        self._dummy_data  = {
+            'app_settings': self._settings,
+            'breadcrumbs': [],
+        }
+
+    def __getattr__(self, name):
+        """Handle attribute access when no session is available"""
+        if not hasattr(self, 'session'):
+            self._use_default_settings()
+        return super().__getattribute__(name)
 
     def __delitem__(self, key: str) -> None:
         """Delete item using dictionary syntax"""
+        if self.is_using_defaults():
+            if key in self._settings:
+                del self._settings[key]
+            return
+            
         if 'app_settings' in self.session:
             app_settings = self.session['app_settings']
             if key in app_settings:
                 del app_settings[key]
                 self.session['app_settings'] = app_settings
                 self.modified = True
+    def __getitem__(self, key):
+        return self.session[key]
 
-    def __getitem__(self, key: str) -> Any:
-        """Get item using dictionary syntax"""
-        return self.get(key)
+    #def __getitem__(self, key: str) -> Any:
+    #    """Get item using dictionary syntax"""
+    #    return self.get(key)
 
-    def __setitem__(self, key: str, value: Any) -> None:
-        """Set item using dictionary syntax"""
-        self.set(key, value)
+    #def __setitem__(self, key: str, value: Any) -> None:
+    #    """Set item using dictionary syntax"""
+    #    self.set(key, value)
+    def __setitem__(self, key, value):
+        self.session[key] = value
+        self.session.modified = True  # Make sure this is set
 
     def _format_url_to_name(self, url):
         """Convert URL's last segment to camel case name with additional handling"""
@@ -55,66 +101,132 @@ class UserSessionManager:
         required_keys = ['url', 'title']
         return all(key in breadcrumb for key in required_keys)
 
-    def add_breadcrumb(self, url):
-        """Add a breadcrumb to the session"""
-        breadcrumbs = self.session.get('breadcrumbs', [])
-        max_breadcrumbs = self.get('max_breadcrumbs', 5)
-        
-        title = self.get_page_title(url)
-        
-        new_crumb = {
-            'url': url,
-            'title': title
-        }
+    def _validate_key_value(self, key: str, value: Any) -> bool:
+        """Validate key and value before storing"""
+        if not isinstance(key, str):
+            logger.warning(f"Invalid key type: {type(key)}")
+            return False
+        return True
 
-        # Check if this URL is already in breadcrumbs
-        existing_urls = [crumb['url'] for crumb in breadcrumbs]
-        if url in existing_urls:
-            # Remove all crumbs after this one
-            index = existing_urls.index(url)
-            breadcrumbs = breadcrumbs[:index]
+    def _get_session_settings(self) -> Dict[str, Any]:
+        """Safely get settings from session"""
+        try:
+            if self.is_using_defaults():
+                return self._settings
+            return self.session.get('app_settings', {})
+        except Exception as e:
+            logger.warning(f"Error accessing session settings: {e}")
+            return settings.DEFAULT_APP_SETTINGS.copy()
+
+    def add_breadcrumb(self, path):
+        """Add a path to breadcrumbs, handling duplicates by moving them to the end"""
+        if self.is_using_defaults():
+            return
+
+        # Get current breadcrumbs (simple list of paths)
+        breadcrumbs = self.session.get('breadcrumbs', [])
         
-        # Add new crumb
-        breadcrumbs.append(new_crumb)
+        # Get max breadcrumbs from settings
+        max_crumbs = self.get_setting('max_breadcrumbs', 5)
+
+        pagetitle = self.get_page_title(path)
+
+        # If path exists, remove it
+        if pagetitle in breadcrumbs:
+            breadcrumbs.remove(pagetitle)
         
-        # Keep only last N breadcrumbs
-        if len(breadcrumbs) > max_breadcrumbs:
-            breadcrumbs = breadcrumbs[-max_breadcrumbs:]
-        
+        # Add new path to the end
+        breadcrumbs.append(pagetitle)
+
+        # Trim to max length if needed
+        if len(breadcrumbs) > max_crumbs:
+            breadcrumbs = breadcrumbs[-max_crumbs:]
+
+        # Update session
         self.session['breadcrumbs'] = breadcrumbs
         self.modified = True
         self.save()
 
+    def clear_all(self) -> None:
+        self.clear(self)
+
     def clear(self) -> None:
+        # Clear messages
+        storage = get_messages(self.request)
+        for message in storage:
+            pass  # Iterate through to clear them
+        
         """Clear all session settings and reinitialize with defaults"""
+        if self.is_using_defaults():
+            self._settings = settings.DEFAULT_APP_SETTINGS.copy()
+            return
+        else:
+            # Clear breadcrumbs
+            if 'breadcrumbs' in self.session:
+                del self.session['breadcrumbs']
+            
+            # Clear app settings
+            if 'app_settings' in self.session:
+                del self.session['app_settings']
+            
         self.session['app_settings'] = settings.DEFAULT_APP_SETTINGS.copy()
         self.modified = True
         self.save()
 
     def clear_breadcrumbs(self):
         """Clear all breadcrumbs"""
+        if self.is_using_defaults():
+            return
+            
         if 'breadcrumbs' in self.session:
             del self.session['breadcrumbs']
             self.modified = True
             self.save()
 
+    def debug_info(self) -> Dict[str, Any]:
+        """Get debug information about current state"""
+        return {
+            'using_defaults': self.is_using_defaults(),
+            'has_session': hasattr(self, 'session'),
+            'is_modified': self.modified,
+            'settings_count': len(self.get_all_settings()),
+            'has_breadcrumbs': bool(self.get_breadcrumbs()),
+        }
+
     def get(self, key: str, default: Any = None) -> Any:
         """Get a value from session settings"""
-        if 'app_settings' not in self.session:
-            self.initialize_settings()
+        if self.is_using_defaults():
+            return self._settings.get(key, default)
         
         app_settings = self.session.get('app_settings', {})
         return app_settings.get(key, default)
 
-    def get_all_settings(self) -> Dict[str, Any]:
-        """Get all settings from session"""
+    def _get_session_settings(self) -> Dict[str, Any]:
+        """Safely get settings from session"""
+        try:
+            if self.is_using_defaults():
+                return self._settings
+            return self.session.get('app_settings', {})
+        except Exception as e:
+            logger.warning(f"Error accessing session settings: {e}")
+            return settings.DEFAULT_APP_SETTINGS.copy()
+
+    def get_all(self) -> Dict[str, Any]:
+        """Get all settings"""
+        if self.is_using_defaults():
+            return self._settings
+            
         if 'app_settings' not in self.session:
             self.initialize_settings()
         return self.session.get('app_settings', settings.DEFAULT_APP_SETTINGS)
 
     def get_breadcrumbs(self):
-        """Get current breadcrumbs"""
-        return self.session.get('breadcrumbs', [])
+        """Get formatted breadcrumbs"""
+        if self.is_using_defaults():
+            return []
+            
+        crumbs = self.session.get('breadcrumbs', [])
+        return [{'path': c['path'], 'title': c['title']} for c in crumbs]
 
     def get_page_title(self, url):
         """Get page title for URL"""
@@ -129,21 +241,54 @@ class UserSessionManager:
         except:            
             return url.strip('/').split('/')[-1].replace('-', ' ').title()
 
+    def get_setting(self, key, default=None):
+        """Get a setting value from session or default app settings"""
+        if self.is_using_defaults():
+            return settings.DEFAULT_APP_SETTINGS.get(key, default)
+        
+        app_settings = self.session.get('app_settings', {})
+        return app_settings.get(key, default)
+
+    def get_template_context(self) -> Dict[str, Any]:
+        """Get context dictionary for templates"""
+        return {
+            'APP_SETTINGS': self.get_all_settings(),
+            'DEFAULT_APP_SETTINGS': settings.DEFAULT_APP_SETTINGS,
+            'is_using_defaults': self.is_using_defaults(),
+            'active_theme': self.get_theme(),
+        }
+
     def get_theme(self) -> str:
         """Get current theme setting"""
         return self.get('active_theme', 'light')
 
     def has_key(self, key: str) -> bool:
         """Check if a key exists in session settings"""
-        if 'app_settings' not in self.session:
-            self.initialize_settings()
-        return key in self.session['app_settings']
+        settings_dict = self._get_session_settings()
+        return key in settings_dict
 
     def initialize_settings(self) -> None:
         """Initialize session with default settings from settings.py"""
-        self.session['app_settings'] = settings.DEFAULT_APP_SETTINGS.copy()
+        defaults = settings.DEFAULT_APP_SETTINGS.copy()
+        defaults['settings_version'] = settings.APP_SETTING_ID  # Add version
+        
+        if self.is_using_defaults():
+            self._settings = defaults
+            return
+            
+        self.session['app_settings'] = defaults
         self.modified = True
         self.save()
+
+    # def initialize_settings(self) -> None:
+    #     """Initialize session with default settings from settings.py"""
+    #     if self.is_using_defaults():
+    #         self._settings = settings.DEFAULT_APP_SETTINGS.copy()
+    #         return
+            
+    #     self.session['app_settings'] = settings.DEFAULT_APP_SETTINGS.copy()
+    #     self.modified = True
+    #     self.save()
 
     def is_home_page(self, url):
         """Check if URL is home page"""
@@ -153,24 +298,26 @@ class UserSessionManager:
         """Check if a menu feature is enabled"""
         return not self.get(f'menu_user_{feature}_disabled', False)
 
+    def is_using_defaults(self) -> bool:
+        """Check if using dummy session with default settings"""
+        return hasattr(self, '_dummy_session')
+
     def items(self) -> list:
         """Get all setting items as (key, value) pairs"""
-        if 'app_settings' not in self.session:
-            self.initialize_settings()
-        return list(self.session['app_settings'].items())
+        settings_dict = self._get_session_settings()
+        return list(settings_dict.items())
 
     def keys(self) -> list:
         """Get all setting keys"""
-        if 'app_settings' not in self.session:
-            self.initialize_settings()
-        return list(self.session['app_settings'].keys())
+        settings_dict = self._get_session_settings()
+        return list(settings_dict.keys())
 
     def pop(self, key: str, default: Any = None) -> Any:
         """Remove and return a value from session settings"""
-        if 'app_settings' not in self.session:
-            self.initialize_settings()
-        
-        app_settings = self.session['app_settings']
+        if self.is_using_defaults():
+            return self._settings.pop(key, default)
+            
+        app_settings = self._get_session_settings()
         value = app_settings.pop(key, default)
         self.session['app_settings'] = app_settings
         self.modified = True
@@ -179,6 +326,9 @@ class UserSessionManager:
 
     def remove_last_breadcrumb(self):
         """Remove the last breadcrumb"""
+        if self.is_using_defaults():
+            return
+            
         breadcrumbs = self.session.get('breadcrumbs', [])
         if breadcrumbs:
             breadcrumbs.pop()
@@ -192,16 +342,23 @@ class UserSessionManager:
 
     def save(self) -> None:
         """Save changes to session"""
+        if self.is_using_defaults():
+            return
+            
         if self.modified:
             self.session.modified = True
             self.modified = False
 
     def set(self, key: str, value: Any) -> None:
         """Set a value in session settings"""
-        if 'app_settings' not in self.session:
-            self.initialize_settings()
-        
-        app_settings = self.session['app_settings']
+        if not self._validate_key_value(key, value):
+            return
+            
+        if self.is_using_defaults():
+            self._settings[key] = value
+            return
+            
+        app_settings = self._get_session_settings()
         app_settings[key] = value
         self.session['app_settings'] = app_settings
         self.modified = True
@@ -230,17 +387,14 @@ class UserSessionManager:
 
     def update(self, settings_dict: Dict[str, Any]) -> None:
         """Update multiple settings at once"""
-        if 'app_settings' not in self.session:
-            self.initialize_settings()
-        
-        app_settings = self.session['app_settings']
-        app_settings.update(settings_dict)
-        self.session['app_settings'] = app_settings
-        self.modified = True
-        self.save()
+        if not isinstance(settings_dict, dict):
+            logger.warning(f"Invalid settings type: {type(settings_dict)}")
+            return
+            
+        for key, value in settings_dict.items():
+            self.set(key, value)
 
     def values(self) -> list:
         """Get all setting values"""
-        if 'app_settings' not in self.session:
-            self.initialize_settings()
-        return list(self.session['app_settings'].values())
+        settings_dict = self._get_session_settings()
+        return list(settings_dict.values())

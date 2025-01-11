@@ -24,14 +24,14 @@ DEFAULT_MENUS = {
                 'auth_requirement': 'auth_only',
                 'order': 10
             },
-        {
+            {
                 'id': 'examples',
                 'item_type': 'link',
                 'menu_text': 'Example Components',
                 'url': '/examples',
                 'icon': '/static/modules/@coreui/icons/sprites/free.svg#cil-applications',
                 'auth_requirement': 'all',
-                'order': 11
+                'order': 13
             },    
             {
                 'id': 'sidebar_iconref',
@@ -47,7 +47,7 @@ DEFAULT_MENUS = {
                 'id': 'sidebar_loginlogoutSEPARATOR',
                 'item_type': 'separator',
                 'auth_requirement': 'all',
-                'order': 99997
+                'order': 9990
             }, 
             {
                 'id': 'sidebar_logout',
@@ -56,7 +56,7 @@ DEFAULT_MENUS = {
                 'url': '/logout',
                 'icon': '/static/modules/@coreui/icons/sprites/free.svg#cil-exit-to-app',
                 'auth_requirement': 'auth_only',
-                'order': 99999
+                'order': 9991
             },   
             {
                 'id': 'sidebar_login',
@@ -65,7 +65,7 @@ DEFAULT_MENUS = {
                 'url': '/login',
                 'icon': '/static/modules/@coreui/icons/sprites/free.svg#cil-lock-locked',
                 'auth_requirement': 'unauth_only',
-                'order': 99998
+                'order': 9992
             },                        
         ]
     },
@@ -93,7 +93,7 @@ DEFAULT_MENUS = {
                 'alt_icon_class':'bg-success',
                 'alt_status': True,
                 'auth_requirement': 'auth_only',
-                'order': 5
+                'order': 50
             },
         ]
     },
@@ -119,7 +119,7 @@ DEFAULT_MENUS = {
                 'alt_icon_class':'bg-danger',
                 'alt_status': True,
                 'auth_requirement': 'auth_only',
-                'order': 5
+                'order': 50
             },
         ]
     },    
@@ -131,7 +131,7 @@ DEFAULT_MENUS = {
                 'item_type': 'header',
                 'menu_text': 'Header Example',
                 'auth_requirement': 'auth_only',
-                'order': 100
+                'order': 10
             },
             {
                 'id': 'user_menu_alttextexample',
@@ -145,7 +145,7 @@ DEFAULT_MENUS = {
                 'alt_icon_class':'bg-danger',
                 'alt_status': True,
                 'auth_requirement': 'auth_only',
-                'order': 10
+                'order': 100
             },            
             {
                 'id': 'user_menu_SEPARATOR99997',

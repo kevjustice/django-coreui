@@ -3,19 +3,29 @@
 {% block head %}{% include './includes/head.html' %}{% endblock head %}
 {% block page_stylesheets %}{{ page_stylesheets  }}{% endblock page_stylesheets %}
 <body class="">
-  {% if not menu_sidebar_disabled %}
+  {% if APP_SETTINGS.menu_sidebar_disabled == False%}
     {% block sidebar %}{% include './includes/sidebar.html' %}{% endblock sidebar %}
   {% endif %}
   <div class="wrapper d-flex flex-column min-vh-100">
-    {% block header %}{% include './includes/header.html' %}{% endblock header %}
+    {% if APP_SETTINGS.header_disabled == False%}
+      {% block header %}{% include './includes/header.html' %}{% endblock header %}
+    {% endif %}
+    <!-- Debug information -->
+    {% if debug %}
+    <!--
+        {{ APP_SETTINGS|pprint }}
+    -->
+    {% endif %}
     <div class="body flex-grow-1">
       {% block content %}
       <div class="container-lg px-4">
-        Hmmmm...  No content got passed?
+        No content passed.
       </div>
       {% endblock content %}
     </div>
-    {% block footer %}{% include './includes/footer.html' %}{% endblock footer %}
+    {% if APP_SETTINGS.footer_disabled == False%}
+      {% block footer %}{% include './includes/footer.html' %}{% endblock footer %}
+    {% endif %}
   </div>
   {% block corescripts %}
   <!-- CoreUI and necessary plugins-->

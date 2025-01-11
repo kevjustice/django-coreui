@@ -2,23 +2,31 @@
 
 <header class="header header-sticky p-0 mb-4">
     <div class="container-fluid border-bottom px-4">
-      {% if not menu_sidebar_disabled %}
-        <button class="header-toggler" type="button" onclick="coreui.Sidebar.getInstance(document.querySelector('#sidebar')).toggle()" style="margin-inline-start: -14px;">
+      {% if APP_SETTINGS.menu_sidebar_disabled == False %}
+        <button class="header-toggler" type="button" onclick="coreui.Sidebar.getInstance(document.querySelector('#sidebar')).toggle();document.getElementById('secondary-brand').style.display = document.getElementById('secondary-brand').style.display === 'none' ? 'block' : 'none' " style="margin-inline-start: -14px;">
             <svg class="icon icon-lg">
                 <use xlink:href="/static/modules/@coreui/icons/sprites/free.svg#cil-menu"></use>
             </svg>
         </button>
-      {% else %}
-        <div class="sidebar-brand">
-          <svg class="sidebar-brand-full" width="150" height="32" alt="Django CoreUI Logo">
-              <use xlink:href="/static/assets/brand/django-coreui.svg#full"></use>
-          </svg>
-          <svg class="sidebar-brand-narrow" width="32" height="32" alt="Django CoreUI Logo">
-              <use xlink:href="/static/assets/brand/django-coreui.svg#signet"></use>
-          </svg>
-        </div>
+
       {% endif %}
-      {% if not menu_header_leftmenu_disabled%}
+
+      <div id="secondary-brand" class="sidebar-brand me-2" style="display:
+        {% if APP_SETTINGS.menu_sidebar_disabled == False %}
+          none
+        {% else %}
+          block
+        {% endif %};">
+        <svg class="sidebar-brand-full" width="150" height="32" alt="Django CoreUI Logo">
+            <use xlink:href="/static/assets/brand/django-coreui.svg#full"></use>
+        </svg>
+        <svg class="sidebar-brand-narrow" width="32" height="32" alt="Django CoreUI Logo">
+            <use xlink:href="/static/assets/brand/django-coreui.svg#signet"></use>
+        </svg>
+      </div>
+      
+      
+      {% if APP_SETTINGS.menu_header_leftmenu_disabled == False %}
         {% block header_left_menu %}
         {% if header_left_menu %}
         <ul class="header-nav d-none d-lg-flex">
@@ -29,7 +37,8 @@
         {% endif %}
         {% endblock header_left_menu %}
       {% endif %}
-        {% if not menu_user_interactions_disabled %}
+      
+        {% if APP_SETTINGS.menu_user_interactions_disabled == False %}
             {% block header_right_menu %}
             {% if header_right_menu %}
             <ul class="header-nav ms-auto">
@@ -41,7 +50,7 @@
             {% endblock header_right_menu %}
 
             <ul class="header-nav">
-                {% if not menu_user_contrast_disabled %}
+                {% if APP_SETTINGS.menu_user_contrast_disabled == False %}
                     <li class="nav-item py-1">
                         <div class="vr h-100 mx-2 text-body text-opacity-75"></div>
                     </li>
@@ -77,8 +86,8 @@
                     </li>
                     
                 {% endif %}
-
-                {% if not menu_user_avatar_menu_disabled %}
+                {% if user.is_authenticated %}
+                  {% if APP_SETTINGS.menu_user_avatar_menu_disabled == False %}
                     {% block user_menu %}
                     {% if user_menu %}
                     <li class="nav-item py-1">
@@ -98,11 +107,12 @@
                     </li>
                     {% endif %}
                     {% endblock user_menu %}
+                  {% endif %}
                 {% endif %}
             </ul>
         {% endif %}
     </div>
-    {% if not menu_breadcrumbs_disabled %}
+    {% if APP_SETTINGS.menu_breadcrumbs_disabled == False %}
       {% render_breadcrumbs request.session.breadcrumbs %}
     {% endif %}
 </header>

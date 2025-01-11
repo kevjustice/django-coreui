@@ -2,6 +2,7 @@ django
 psycopg
 psycopg_binary
 python-dotenv
+whitenoise
 django-debug-toolbar # for development
 #celery
 #django-celery-beat
@@ -10,7 +11,7 @@ django-debug-toolbar # for development
 #selenium 
 #wget
 #docker
-#whitenoise
+
 #django-widget-tweaks
 #django-admin-interface
 #django-extensions

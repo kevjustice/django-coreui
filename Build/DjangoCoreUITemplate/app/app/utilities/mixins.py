@@ -10,7 +10,7 @@ class BaseContextMixin:
     def get_base_context(self, request):
         session = UserSessionManager(request)
         menu_manager = MenuManager.ensure_default_menus(session)
-        all_settings = session.get_all_settings()
+        all_settings = session.get_all()
 
         return {
             'sidebar': menu_manager.get_menu('sidebar', request.user.is_authenticated),

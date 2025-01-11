@@ -8,7 +8,17 @@ from app.utilities.session_manager import UserSessionManager
 from app.utilities.menu_manager import MenuManager
 from app.utilities.request_utils import is_ajax
 
+class CacheControlMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
 
+    def __call__(self, request):
+        response = self.get_response(request)
+        if any(request.path.endswith(ext) for ext in ['.map', '.scss', '.css']):
+            response['Cache-Control'] = 'public, max-age=31536000, immutable'
+            response['Expires'] = 'Thu, 31 Dec 2099 23:59:59 GMT'
+            response['Pragma'] = 'cache'
+        return response
 
 class MenuMiddleware(MiddlewareMixin):
     """Middleware to process menu-related functionality"""
@@ -53,8 +63,15 @@ class BreadcrumbMiddleware:
 
     def __call__(self, request):
         if self.should_track_breadcrumb(request):
+            path = request.get_full_path()
+            
+            # Special handling for examples paths
+            if path.startswith('/examples/'):
+                # Only track '/examples/' instead of the full path
+                path = '/examples/'
+            
             session = UserSessionManager(request)
-            session.add_breadcrumb(request.get_full_path())
+            session.add_breadcrumb(path)
 
         response = self.get_response(request)
         return response
