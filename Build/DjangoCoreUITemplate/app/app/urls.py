@@ -22,7 +22,7 @@ urlpatterns = [
     # Main URLs
     path('', views.HomeView.as_view(), name='home'),
 
-    # Example URLS
+    # Example URLS CONFIGURE: You can remove these if you don't need them.
     path('dashboard/', views.DashboardView.as_view(), name='dashboard'),
     path('debug/', views.DebugView.as_view(), name='debug'),
     path('icons/', views.IconsView.as_view(), name='icons'),
@@ -51,7 +51,7 @@ urlpatterns = [
     path('initial-setup/', views.InitialSetupView.as_view(), name='initial_setup'),
     path('register/', views.UserRegister.as_view(), name='register'),
     
-    # Email Testing URLs 
+    # Email Testing URLs CONFIGURE: You can remove these if you don't need them.
     path('admin-test-email/', views.test_email_view, name='test_email'),
     path('admin-comprehensive-email-test/', views.comprehensive_email_test_view, name='comprehensive_email_test'),
     path('admin/ajax-test-email/', views.ajax_test_email, name='ajax_test_email'),

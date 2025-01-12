@@ -1,4 +1,19 @@
 # defaults.py
+'''
+Customize this menu to suit your needs.  The menu is a dictionary with keys for each menu.  Each menu has an 'id' and 'items' key.  The 'items' key is a list of dictionaries, each representing a menu item.  The menu item dictionary has the following keys:
+    'id' - a unique identifier for the menu item
+    'item_type' - a string representing the type of menu item.  Valid values are 'link', 'separator', 'header'
+    'menu_text' - the text that will be displayed for the menu item
+    'url' - the URL that the menu item will link to.  This is only used for 'link' items
+    'icon' - the icon that will be displayed next to the menu item
+    'auth_requirement' - a string representing the authentication requirement for the menu item.  Valid values are 'auth_only', 'unauth_only', 'all'
+    'order' - an integer representing the order in which the menu item will be displayed.  Lower numbers are displayed first
+    'secondary_text' - a string representing the secondary text that will be displayed for the menu item.  This is only used for 'link' items
+    'secondary_class' - a string representing the class that will be applied to the secondary text.  This is only used for 'link' items
+    'alt_icon' - a string representing the alternate icon that will be displayed when alt_status is True.  This is only used for 'link' items
+    'alt_icon_class' - a string representing the class that will be applied to the alternate icon.  This is only used for 'link' items
+    'alt_status' - a boolean representing whether the alternate icon should be displayed.  This is only used for 'link' items
+'''
 
 from app.utilities.enums import MenuItemType, AuthRequirement
 

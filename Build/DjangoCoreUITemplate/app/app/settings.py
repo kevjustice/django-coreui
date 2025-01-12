@@ -13,7 +13,7 @@ from django.utils.safestring import mark_safe
 import logging
 from app.utilities.is_pg_available import postgres_connection
 
-# you should remove this section when in docker production
+# CONFIGURE: you should remove this section when in docker production
 from dotenv import load_dotenv
 # Load .env file
 load_dotenv()
@@ -46,15 +46,17 @@ SECURE_HSTS_SECONDS = 31536000  # 1 year
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
+#  CONFIGURE: These are overrides for the above settings.  They are set to False for development purposes.  You should delete them for production.
 SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 SECURE_PROXY_SSL_HEADER = None
 
 # APPLICATION SETTINGS
-VERSION = '1.0.0'
-APP_SETTING_ID = VERSION  # Change this to force reinitialization of default_app_settings
+VERSION = '1.0.0' # Change this to force reinitialization of default_app_settings
+APP_SETTING_ID = VERSION  
 
+# CONFIGURE: The following settings are used to customize the appearance and behavior of the application.  They can be overridden in the database by changing the value in the app_setting table.  The default values are set here.
 DEFAULT_APP_SETTINGS = {
     'appname': 'My App',
     'full_logo_url': '/static/assets/brand/coreui.svg#full',
@@ -72,9 +74,6 @@ DEFAULT_APP_SETTINGS = {
     """),
     'site_javascripts': mark_safe("""
         <script src="/static/js/myjs.js"></script>
-        <script>
-            alert('You really should look at the settings.py file and update the defaults!');
-        </script>
     """),
     'header_disabled': False,
     'menu_breadcrumbs_disabled': False,
@@ -242,7 +241,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # FILE UPLOAD SETTINGS
-FILE_UPLOAD_MAX_MEMORY_SIZE = 2621440  # 2.5 MB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 2621440  # 2.5 MB CONFIGURE: This is the maximum file size for uploads.  Change this to suit your needs.
 FILE_UPLOAD_PERMISSIONS = 0o644
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -258,8 +257,8 @@ DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'webmaster@localhost')
 
 # SESSION CONFIGURATION
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
-SESSION_COOKIE_AGE = 1209600  # 2 weeks in seconds
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = 1209600  # 2 weeks in seconds CONFIGURE: This is the session length in seconds.  Change this to suit your needs.
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True # Sessions will clear when browser closes
 
 # AUTHENTICATION SETTINGS
 LOGIN_URL = '/login/'
@@ -269,7 +268,7 @@ REGISTER_URL = '/register'
 
 
 
-# LOGGING CONFIGURATION
+# LOGGING CONFIGURATION CONFIGURE: This is the logging configuration.  Change this to suit your needs.
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
