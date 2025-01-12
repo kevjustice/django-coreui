@@ -103,13 +103,14 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'app.middleware.middleware.SessionToContextMiddleware',
+    'app.middleware.middleware.BreadcrumbMiddleware',
+    'app.middleware.middleware.MenuMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'app.middleware.middleware.BreadcrumbMiddleware',
-    'app.middleware.middleware.MenuMiddleware',
     'app.middleware.initial_setup.InitialSetupMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'app.middleware.middleware.CacheControlMiddleware',
@@ -307,7 +308,7 @@ LOGGING = {
         },
         'app': {
             'handlers': ['console', 'file'],
-            'level': 'INFO',
+            'level': 'DEBUG',
             'propagate': False,
         },
         'app.utilities.menu_manager': {

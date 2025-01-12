@@ -95,8 +95,7 @@ class HomeView(BaseContextMixin, TemplateView):
         base_context = self.get_base_context(self.request)
         base_context.update({
             'content': 'homepage html default here!',
-            'menu_user_interactions_disabled': True,
-            'menu_user_avatar_menu_disabled': True,
+
             'title': f"{base_context['title']}Home"
         })
         context.update(base_context)
@@ -112,6 +111,17 @@ class DashboardView(LoginRequiredMixin, BaseContextMixin, TemplateView):
         base_context['title'] = f"{base_context['title']}Dashboard"
         context.update(base_context)
         return context
+    
+class DebugView(LoginRequiredMixin, BaseContextMixin, TemplateView):
+    """Debug view"""
+    template_name = 'home/debug.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        base_context = self.get_base_context(self.request)
+        base_context['title'] = f"{base_context['title']}Debug"
+        context.update(base_context)
+        return context    
 
 class ExampleTemplateView(BaseContextMixin, TemplateView):
     template_name = 'examples/index.html'  # Default template for index
@@ -160,9 +170,7 @@ class ExampleTemplateView(BaseContextMixin, TemplateView):
         
         # Get template content
         template_content = self.get_template_content(template_path)
-        print(f"Template Path: {template_path}")  # Debug
-        print(f"Template Content Length: {len(template_content) if template_content else 0}")  # Debug
-        
+       
         context.update(base_context)
         context.update({
             'template_content': template_content,
@@ -173,8 +181,6 @@ class ExampleTemplateView(BaseContextMixin, TemplateView):
                             else None)
         })
         
-        # Debug print
-        print(f"Context keys: {context.keys()}")
         return context
 
     def get_template_content(self, template_path):

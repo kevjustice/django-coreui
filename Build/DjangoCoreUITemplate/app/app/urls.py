@@ -24,6 +24,7 @@ urlpatterns = [
 
     # Example URLS
     path('dashboard/', views.DashboardView.as_view(), name='dashboard'),
+    path('debug/', views.DebugView.as_view(), name='debug'),
     path('icons/', views.IconsView.as_view(), name='icons'),
     path('examples/', 
          ExampleTemplateView.as_view(template_name='examples/index.html'), 

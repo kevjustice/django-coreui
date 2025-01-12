@@ -2,7 +2,7 @@
 
 <header class="header header-sticky p-0 mb-4">
     <div class="container-fluid border-bottom px-4">
-      {% if APP_SETTINGS.menu_sidebar_disabled == False %}
+      {% if session.app_settings.menu_sidebar_disabled == False %}
         <button class="header-toggler" type="button" onclick="coreui.Sidebar.getInstance(document.querySelector('#sidebar')).toggle();document.getElementById('secondary-brand').style.display = document.getElementById('secondary-brand').style.display === 'none' ? 'block' : 'none' " style="margin-inline-start: -14px;">
             <svg class="icon icon-lg">
                 <use xlink:href="/static/modules/@coreui/icons/sprites/free.svg#cil-menu"></use>
@@ -12,7 +12,7 @@
       {% endif %}
 
       <div id="secondary-brand" class="sidebar-brand me-2" style="display:
-        {% if APP_SETTINGS.menu_sidebar_disabled == False %}
+        {% if session.app_settings.menu_sidebar_disabled == False %}
           none
         {% else %}
           block
@@ -26,31 +26,31 @@
       </div>
       
       
-      {% if APP_SETTINGS.menu_header_leftmenu_disabled == False %}
+      {% if session.app_settings.menu_header_leftmenu_disabled == False %}
         {% block header_left_menu %}
-        {% if header_left_menu %}
+        {% if session.menus.header_left_menu %}
         <ul class="header-nav d-none d-lg-flex">
-            {% for item in header_left_menu.items %}
+            {% for item in session.menus.header_left_menu.items %}
                 {% render_header_left_menu_item item %}
             {% endfor %}
         </ul>
         {% endif %}
-        {% endblock header_left_menu %}
+        {% endblock  %}
       {% endif %}
       
-        {% if APP_SETTINGS.menu_user_interactions_disabled == False %}
+        {% if session.app_settings.menu_user_interactions_disabled == False %}
             {% block header_right_menu %}
-            {% if header_right_menu %}
+            {% if session.menus.header_right_menu %}
             <ul class="header-nav ms-auto">
-                {% for item in header_right_menu.items %}
+                {% for item in session.menus.header_right_menu.items %}
                     {% render_header_right_menu_item item %}
                 {% endfor %}
             </ul>
             {% endif %}
-            {% endblock header_right_menu %}
+            {% endblock  %}
 
             <ul class="header-nav">
-                {% if APP_SETTINGS.menu_user_contrast_disabled == False %}
+                {% if session.app_settings.menu_user_contrast_disabled == False %}
                     <li class="nav-item py-1">
                         <div class="vr h-100 mx-2 text-body text-opacity-75"></div>
                     </li>
@@ -87,9 +87,9 @@
                     
                 {% endif %}
                 {% if user.is_authenticated %}
-                  {% if APP_SETTINGS.menu_user_avatar_menu_disabled == False %}
+                  {% if session.app_settings.menu_user_avatar_menu_disabled == False %}
                     {% block user_menu %}
-                    {% if user_menu %}
+                    {% if session.menus.user_menu %}
                     <li class="nav-item py-1">
                         <div class="vr h-100 mx-2 text-body text-opacity-75"></div>
                     </li>
@@ -100,19 +100,19 @@
                             </div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end pt-0">
-                            {% for item in user_menu.items %}
+                            {% for item in session.menus.user_menu.items %}
                                 {% render_header_user_menu_item item %}
                             {% endfor %}
                         </div>
                     </li>
                     {% endif %}
-                    {% endblock user_menu %}
+                    {% endblock  %}
                   {% endif %}
                 {% endif %}
             </ul>
         {% endif %}
     </div>
-    {% if APP_SETTINGS.menu_breadcrumbs_disabled == False %}
-      {% render_breadcrumbs request.session.breadcrumbs %}
+    {% if session.app_settings.menu_breadcrumbs_disabled == False %}
+      {% render_breadcrumbs breadcrumbs %}
     {% endif %}
 </header>

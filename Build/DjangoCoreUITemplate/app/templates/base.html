@@ -4,17 +4,11 @@
 {% block page_stylesheets %}{{ page_stylesheets  }}{% endblock page_stylesheets %}
 <body class="">
   {% if APP_SETTINGS.menu_sidebar_disabled == False%}
-    {% block sidebar %}{% include './includes/sidebar.html' %}{% endblock sidebar %}
+    {% block sidebar %}{% include './includes/sidebar.html' with user=user %}{% endblock sidebar %}
   {% endif %}
   <div class="wrapper d-flex flex-column min-vh-100">
     {% if APP_SETTINGS.header_disabled == False%}
       {% block header %}{% include './includes/header.html' %}{% endblock header %}
-    {% endif %}
-    <!-- Debug information -->
-    {% if debug %}
-    <!--
-        {{ APP_SETTINGS|pprint }}
-    -->
     {% endif %}
     <div class="body flex-grow-1">
       {% block content %}

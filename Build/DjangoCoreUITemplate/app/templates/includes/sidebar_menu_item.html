@@ -1,14 +1,17 @@
 {# templates/includes/sidebar_menu_item.html #}
-{% if item.item_type.value == 'header' %}
+{% load static %}
+{% if item.auth_requirement == 'all' or item.auth_requirement == 'auth_only' and user.is_authenticated or item.auth_requirement == 'unauth_only' and not user.is_authenticated %}
+
+    {% if item.item_type == 'header' %}
         <li class="nav-title">{{ item.menu_text }}</li>
-    {% elif item.item_type.value == 'separator' %}
+    {% elif item.item_type == 'separator' %}
         <li class="nav-divider"></li>
-    {% elif item.item_type.value == 'link' or item.item_type.value == 'altlink' %}
+    {% elif item.item_type == 'link' or item.item_type == 'altlink' %}
         <li class="nav-item">
             <a class="nav-link" href="{{ item.url }}">
                 {% if item.icon %}
                     <svg class="nav-icon {% if item.alt_status %}{{ item.alt_icon_class }}{% endif %}">
-                        <use xlink:href="{{ item.current_icon }}"></use>
+                        <use xlink:href="{{ item.icon }}"></use>
                     </svg>
                 {% endif %}
                 {{ item.menu_text }}
@@ -17,7 +20,7 @@
                 {% endif %}
             </a>
         </li>
-    {% elif item.item_type.value == 'dropdown' %}
+    {% elif item.item_type == 'dropdown' %}
     
         <li class="nav-group">
             <a class="nav-link nav-group-toggle" href="#">
@@ -30,7 +33,7 @@
             </a>
             <ul class="nav-group-items compact">
                 {% for subitem in item.items %}
-                    {% if subitem.item_type.value == 'link' %}
+                    {% if subitem.item_type == 'link' %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ subitem.url }}">
                                 
@@ -53,3 +56,4 @@
             </ul>
         </li>
     {% endif %}
+{% endif %}

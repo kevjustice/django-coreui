@@ -46,7 +46,20 @@
     <link href="/static/css/style.css" rel="stylesheet">
     
     <script src="/static/modules/@coreui/coreui/dist/js/coreui.bundle.js"></script>
-    
+    <style>
+      @-webkit-keyframes fadeIn1s {
+        from { opacity: 0; }
+          to { opacity: 1; }
+    }
+    @keyframes fadeIn1s {
+        from { opacity: 0; }
+          to { opacity: 1; }
+    }
+    #secondary-brand {
+        -webkit-animation: fadeIn1s 1s;
+                animation: fadeIn1s 1s;
+    }
+    </style>
     
     
     <script src="/static/js/config.js"></script>

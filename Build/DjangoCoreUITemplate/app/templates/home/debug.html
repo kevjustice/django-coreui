@@ -1,0 +1,46 @@
+{% extends "../base.html" %}
+
+{% block title %} DEBUG {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block page_stylesheets %}{% endblock page_stylesheets %}
+
+{% block content %}
+User exists: {{ user|yesno:"yes,no" }}<br>
+    Is authenticated: {{ user.is_authenticated|yesno:"yes,no" }}<br>
+    Username: {{ user.username }}
+<h3>user.is_authenticated</h3>
+{{ user.is_authenticated }}
+<h3>request.session.menu_version</h3>
+{{ request.session.menu_version }}
+<h3>request.session.menus.sidebar.version</h3>
+{{ request.session.menus.sidebar.version }}
+<h3>request.session.menus.header_right_menu.menu_id</h3>
+{{ request.session.menus.header_right_menu.menu_id }}
+<h3>session.menus.sidebar.items</h3>
+<pre>{{ session.menus.sidebar.items }}</pre>
+<h3>menus.sidebar.items</h3>
+<pre>{{ menus.sidebar.items }}</pre>
+<h3>sidebar.items</h3>
+<pre>{{ sidebar.items }}</pre>
+<h3>menu_version</h3>
+{{ menu_version }}
+<h3>breadcrumbs</h3>
+<pre>{{ breadcrumbs }}</pre>
+
+<hr><hr>
+{% load static %}
+<pre>
+{% debug %}
+</pre>
+<hr><hr>
+<pre>
+  {% for key, value in request.GET.items %}
+      {{ key }}: {{ value }}
+  {% endfor %}
+  </pre> 
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block page_javascripts %}{% endblock page_javascripts %} 

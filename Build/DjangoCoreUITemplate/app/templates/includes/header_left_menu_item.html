@@ -1,22 +1,24 @@
-{% if item.item_type.value == 'header' %}
-    <!-- NOT IMPLEMENTED -->
-{% elif item.item_type.value == 'separator' %}
-    <div class="vr h-100 mx-2 text-body text-opacity-75"></div>
-{% elif item.item_type.value == 'link' or item.item_type.value == 'altlink' %}
+{% if item.auth_requirement == 'all' or item.auth_requirement == 'auth_only' and user.is_authenticated or item.auth_requirement == 'unauth_only' and not user.is_authenticated %}
+    {% if item.item_type == 'header' %}
+        <!-- NOT IMPLEMENTED -->
+    {% elif item.item_type == 'separator' %}
+        <div class="vr h-100 mx-2 text-body text-opacity-75"></div>
+    {% elif item.item_type == 'link' or item.item_type == 'altlink' %}
 
-    <li class="nav-item">
-        <a class="nav-link" href="{{ item.url }}">
-            {% if item.icon %}
-                <svg class="icon icon-lg {% if item.alt_status %}{{ item.alt_icon_class }}{% endif %}">
-                    <use xlink:href="{{ item.current_icon }}"></use>
-                </svg>
-            {% endif %}
-            <span class="{{ item.menu_class }}">{{ item.menu_text }}</span>
-            {% if item.secondary_text %}
-                <span class="{{ item.secondary_class }}">{{ item.secondary_text }}</span>
-            {% endif %}
-        </a>
-    </li>
-{% elif item.item_type.value == 'dropdown' %}
-    <!-- NOT IMPLEMENTED -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{ item.url }}">
+                {% if item.icon %}
+                    <svg class="icon icon-lg {% if item.alt_status %}{{ item.alt_icon_class }}{% endif %}">
+                        <use xlink:href="{{ item.icon }}"></use>
+                    </svg>
+                {% endif %}
+                <span class="{{ item.menu_class }}">{{ item.menu_text }}</span>
+                {% if item.secondary_text %}
+                    <span class="{{ item.secondary_class }}">{{ item.secondary_text }}</span>
+                {% endif %}
+            </a>
+        </li>
+    {% elif item.item_type == 'dropdown' %}
+        <!-- NOT IMPLEMENTED -->
+    {% endif %}
 {% endif %}

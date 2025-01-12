@@ -8,6 +8,23 @@ from app.utilities.session_manager import UserSessionManager
 from app.utilities.menu_manager import MenuManager
 from app.utilities.request_utils import is_ajax
 
+class SessionToContextMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+        return response
+
+    def process_template_response(self, request, response):
+        if hasattr(response, 'context_data'):
+            # Add the entire session to the context
+            response.context_data['session'] = request.session
+            
+            
+            
+        return response
+
 class CacheControlMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
@@ -74,6 +91,13 @@ class BreadcrumbMiddleware:
             session.add_breadcrumb(path)
 
         response = self.get_response(request)
+        return response
+    
+    def process_template_response(self, request, response):
+        """Add breadcrumbs to template context"""
+        if hasattr(response, 'context_data'):
+            session = UserSessionManager(request)
+            response.context_data['breadcrumbs'] = session.get_breadcrumbs()
         return response
 
     def should_track_breadcrumb(self, request):
